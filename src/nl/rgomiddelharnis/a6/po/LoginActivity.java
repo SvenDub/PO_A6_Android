@@ -7,11 +7,9 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 
-public class MainActivity extends SherlockFragmentActivity {
+public class LoginActivity extends SherlockFragmentActivity {
 
     ActionBar mActionBar;
-    public static final boolean LOCAL_LOGD = true;
-    public static final boolean LOCAL_LOGV = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,13 +17,13 @@ public class MainActivity extends SherlockFragmentActivity {
 
         mActionBar = getSupportActionBar();
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getSupportMenuInflater().inflate(R.menu.main, menu);
+        getSupportMenuInflater().inflate(R.menu.login, menu);
         return true;
     }
 

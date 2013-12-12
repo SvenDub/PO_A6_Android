@@ -4,5 +4,7 @@
     <string name="app_name">PO A6</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_beheer_tafel">BeheerTafelActivity</string>
 
 </resources>

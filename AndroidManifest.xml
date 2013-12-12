@@ -22,6 +22,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="nl.rgomiddelharnis.a6.po.LoginActivity"
+            android:label="@string/title_activity_login" >
+        </activity>
+        <activity
+            android:name="nl.rgomiddelharnis.a6.po.BeheerTafelActivity"
+            android:label="@string/title_activity_beheer_tafel" >
+        </activity>
     </application>
 
 </manifest>
