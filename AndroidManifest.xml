@@ -24,11 +24,13 @@
         </activity>
         <activity
             android:name="nl.rgomiddelharnis.a6.po.LoginActivity"
-            android:label="@string/title_activity_login" >
+            android:label="@string/title_activity_login"
+            android:exported="true" ><!-- TODO: Verwijderen na debug -->
         </activity>
         <activity
             android:name="nl.rgomiddelharnis.a6.po.BeheerTafelActivity"
-            android:label="@string/title_activity_beheer_tafel" >
+            android:label="@string/title_activity_beheer_tafel" 
+            android:exported="true" ><!-- TODO: Verwijderen na debug -->
         </activity>
     </application>
 

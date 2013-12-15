@@ -2,23 +2,30 @@
 <resources>
 
     <!-- Meta -->
-    <string name="app_name">PO A6</string>
-    
+    <string name="app_name">Kassasysteem</string>
+    <string name="app_logo">Logo</string>
+
     <!-- Menu's -->
     <string name="action_settings">Instellingen</string>
     <string name="action_logout">Uitloggen</string>
-    
+    <string name="action_login">Inloggen</string>
+
     <!-- tmp -->
     <string name="hello_world">Hallo wereld!</string>
-    
+
     <!-- Activity titels -->
-    <string name="title_activity_login">LoginActivity</string>
+    <string name="title_activity_login">Kassasysteem</string>
     <string name="title_activity_beheer_tafel">BeheerTafelActivity</string>
-    
+
     <!-- MainActivity -->
     <string name="kies_tafel">Kies een tafel:</string>
-    
+
     <!-- TafelsFragment -->
     <string name="list_tafels_empty">Geen tafels gevonden.</string>
+
+    <!-- LoginActivity -->
+    <string name="server">Server</string>
+    <string name="gebruikersnaam">Gebruikersnaam</string>
+    <string name="wachtwoord">Wachtwoord</string>
 
 </resources>
