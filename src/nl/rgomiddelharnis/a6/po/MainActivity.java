@@ -67,7 +67,7 @@ public class MainActivity extends SherlockFragmentActivity {
 
         TafelsFragment tafelsFragment = new TafelsFragment();
 
-        fragmentTransaction.add(R.id.fragment_tafels,
+        fragmentTransaction.replace(R.id.fragment_tafels,
                 tafelsFragment);
         fragmentTransaction.commit();
 

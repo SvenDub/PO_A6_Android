@@ -15,6 +15,10 @@
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_beheer_tafel">BeheerTafelActivity</string>
     
+    <!-- MainActivity -->
     <string name="kies_tafel">Choose a table:</string>
+    
+    <!-- TafelsFragment -->
+    <string name="list_tafels_empty">No tables found.</string>
 
 </resources>
