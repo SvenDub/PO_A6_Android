@@ -50,6 +50,7 @@ public class LoginActivity extends SherlockFragmentActivity {
         mTxtServer.setOnEditorActionListener(getOnEditorActionListener());
         mTxtGebruiker.setOnEditorActionListener(getOnEditorActionListener());
         mTxtWachtwoord.setOnEditorActionListener(getOnEditorActionListener());
+        mTxtWachtwoord.setImeActionLabel(getText(R.string.action_login), EditorInfo.IME_ACTION_DONE);
 
     }
 
@@ -60,6 +61,26 @@ public class LoginActivity extends SherlockFragmentActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getSupportMenuInflater().inflate(R.menu.login, menu);
         return true;
+    }
+
+    /**
+     * Verwerkt het gedrag van de knoppen in het menu.
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_login: // Login
+                login();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    
+    /**
+     * Checkt de logingegevens en logt de gebruiker in.
+     */
+    private boolean login() {
+        return false;
     }
 
     /**
@@ -79,7 +100,7 @@ public class LoginActivity extends SherlockFragmentActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId,
                     KeyEvent event) {
-                
+
                 switch (actionId) {
 
                     case EditorInfo.IME_ACTION_DONE: // Invoer bevestigen
@@ -89,7 +110,7 @@ public class LoginActivity extends SherlockFragmentActivity {
                             case R.id.txt_gebruiker:
                                 break;
                             case R.id.txt_wachtwoord:
-                                // login();
+                                login();
                                 break;
                         }
                         break;
@@ -123,25 +144,10 @@ public class LoginActivity extends SherlockFragmentActivity {
                 }
                 return false;
             }
-            
+
         };
-        
+
         return l;
-    }
-    
-    /**
-     * Verwerkt selecties in het menu.
-     */
-    @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-        
-        switch (item.getItemId()) {
-            case R.id.action_login:
-                // login();
-                break;
-        }
-        
-        return super.onMenuItemSelected(featureId, item);
     }
 
 }

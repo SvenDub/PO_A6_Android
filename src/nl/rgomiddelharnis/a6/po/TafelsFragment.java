@@ -61,10 +61,10 @@ public class TafelsFragment extends SherlockListFragment {
         // Maak een SimpleAdapter aan voor het verwerken van de gegevens.
         SimpleAdapter adapter = new SimpleAdapter(getActivity(), data, R.layout.list_item_tafel,
                 from, to);
-        
+
         // Pas de adapter toe op de lijst.
         setListAdapter(adapter);
-        
+
         return inflater.inflate(R.layout.fragment_tafels, container, false);
     }
 }

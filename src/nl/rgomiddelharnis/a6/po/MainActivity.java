@@ -33,7 +33,7 @@ public class MainActivity extends SherlockFragmentActivity {
      * 
      * @see android.util.Log
      */
-    private static final String TAG = "MainActivity"; 
+    private static final String TAG = "MainActivity";
 
     ActionBar mActionBar;
 
@@ -60,7 +60,7 @@ public class MainActivity extends SherlockFragmentActivity {
         // Stel de layout in
         setContentView(R.layout.activity_main);
 
-        // Voeg het TafelsFragment toe die een lijst met tafels beavat.
+        // Voeg het TafelsFragment toe die een lijst met tafels bevat.
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager
                 .beginTransaction();
