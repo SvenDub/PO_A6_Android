@@ -28,4 +28,11 @@
     <string name="gebruikersnaam">Gebruikersnaam</string>
     <string name="wachtwoord">Wachtwoord</string>
 
+    <!-- BeheerTafelActivity -->
+    <string name="voorgerecht">Voorgerecht</string>
+    <string name="hoofdgerecht">Hoofdgerecht</string>
+    <string name="nagerecht">Nagerecht</string>
+    <string name="drank">Drank</string>
+    <string name="bestellijst">Bestellijst</string>
+
 </resources>

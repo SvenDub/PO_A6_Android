@@ -27,5 +27,12 @@
     <string name="server">Server</string>
     <string name="gebruikersnaam">Username</string>
     <string name="wachtwoord">Password</string>
+    
+    <!-- BeheerTafelActivity -->
+    <string name="voorgerecht">Entree</string>
+    <string name="hoofdgerecht">Main course</string>
+    <string name="nagerecht">Dessert</string>
+    <string name="drank">Drinks</string>
+    <string name="bestellijst">Order list</string>
 
 </resources>
