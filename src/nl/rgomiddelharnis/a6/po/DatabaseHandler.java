@@ -21,6 +21,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * De huidige versie van de database.
      */
     public static final int DATABASE_VERSION = 1;
+    
+    public static final String TABLE_LOGIN = "login";
+    
+    public static final String KEY_ID = "id";
+    public static final String KEY_GEBRUIKER = "gebruikersnaam";
+    public static final String KEY_WACHTWOORD = "wachtwoord";
+    public static final String KEY_SITE = "site";
 
     /**
      * Maakt een nieuwe <code>DatabaseHandler</code> aan om verbindingen met de
@@ -38,7 +45,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // TODO Auto-generated method stub
-
+        String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_LOGIN + "(" + KEY_ID
+                + " INTEGER PRIMARY KEY, " + KEY_GEBRUIKER + " TEXT UNIQUE, " + KEY_WACHTWOORD
+                + " TEXT," + KEY_SITE + " TEXT" + ")";
     }
 
     /**
