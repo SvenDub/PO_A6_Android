@@ -1,6 +1,7 @@
 
 package nl.rgomiddelharnis.a6.po;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -36,6 +37,7 @@ public class MainActivity extends SherlockFragmentActivity {
     private static final String TAG = "MainActivity";
 
     ActionBar mActionBar;
+    DatabaseHandler mDb;
 
     /**
      * <p>
@@ -56,20 +58,37 @@ public class MainActivity extends SherlockFragmentActivity {
         super.onCreate(savedInstanceState);
 
         mActionBar = getSupportActionBar();
+        mDb = new DatabaseHandler(getApplicationContext());
 
-        // Stel de layout in
-        setContentView(R.layout.activity_main);
+        if (mDb.isGebruikerIngelogd()) {
 
-        // Voeg het TafelsFragment toe die een lijst met tafels bevat.
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager
-                .beginTransaction();
+            // Gebruiker is ingelogd
+            
+            // Stel de layout in
+            setContentView(R.layout.activity_main);
 
-        TafelsFragment tafelsFragment = new TafelsFragment();
+            // Voeg het TafelsFragment toe die een lijst met tafels bevat.
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager
+                    .beginTransaction();
 
-        fragmentTransaction.replace(R.id.fragment_tafels,
-                tafelsFragment);
-        fragmentTransaction.commit();
+            TafelsFragment tafelsFragment = new TafelsFragment();
+
+            fragmentTransaction.replace(R.id.fragment_tafels,
+                    tafelsFragment);
+            fragmentTransaction.commit();
+
+        } else {
+            
+            // Gebruiker is niet ingelogd
+            
+            // Start LoginActivity
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+            finish();
+            
+        }
 
     }
 
