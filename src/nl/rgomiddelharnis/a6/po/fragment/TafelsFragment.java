@@ -1,5 +1,5 @@
 
-package nl.rgomiddelharnis.a6.po;
+package nl.rgomiddelharnis.a6.po.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,6 +8,10 @@ import android.view.ViewGroup;
 import android.widget.SimpleAdapter;
 
 import com.actionbarsherlock.app.SherlockListFragment;
+
+import nl.rgomiddelharnis.a6.po.R;
+import nl.rgomiddelharnis.a6.po.R.id;
+import nl.rgomiddelharnis.a6.po.R.layout;
 
 import java.util.ArrayList;
 import java.util.HashMap;

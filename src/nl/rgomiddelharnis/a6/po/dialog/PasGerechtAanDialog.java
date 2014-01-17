@@ -1,5 +1,5 @@
 
-package nl.rgomiddelharnis.a6.po;
+package nl.rgomiddelharnis.a6.po.dialog;
 
 import com.actionbarsherlock.app.SherlockDialogFragment;
 

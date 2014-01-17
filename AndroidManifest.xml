@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="nl.rgomiddelharnis.a6.po.MainActivity"
+            android:name="nl.rgomiddelharnis.a6.po.activity.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,12 +23,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="nl.rgomiddelharnis.a6.po.LoginActivity"
+            android:name="nl.rgomiddelharnis.a6.po.activity.LoginActivity"
             android:label="@string/title_activity_login"
             android:exported="true" ><!-- TODO: Verwijderen na debug -->
         </activity>
         <activity
-            android:name="nl.rgomiddelharnis.a6.po.BeheerTafelActivity"
+        android:name="nl.rgomiddelharnis.a6.po.activity.BeheerTafelActivityeheerTafelActivity"
             android:label="@string/title_activity_beheer_tafel" 
             android:exported="true" ><!-- TODO: Verwijderen na debug -->
         </activity>

@@ -1,5 +1,5 @@
 
-package nl.rgomiddelharnis.a6.po;
+package nl.rgomiddelharnis.a6.po.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,13 @@ import android.support.v4.app.FragmentTransaction;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
+
+import nl.rgomiddelharnis.a6.po.DatabaseHandler;
+import nl.rgomiddelharnis.a6.po.R;
+import nl.rgomiddelharnis.a6.po.R.id;
+import nl.rgomiddelharnis.a6.po.R.layout;
+import nl.rgomiddelharnis.a6.po.R.menu;
+import nl.rgomiddelharnis.a6.po.fragment.TafelsFragment;
 
 /**
  * Beginscherm van de app.

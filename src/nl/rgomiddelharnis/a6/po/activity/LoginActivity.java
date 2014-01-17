@@ -1,5 +1,5 @@
 
-package nl.rgomiddelharnis.a6.po;
+package nl.rgomiddelharnis.a6.po.activity;
 
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -12,6 +12,12 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+
+import nl.rgomiddelharnis.a6.po.R;
+import nl.rgomiddelharnis.a6.po.R.id;
+import nl.rgomiddelharnis.a6.po.R.layout;
+import nl.rgomiddelharnis.a6.po.R.menu;
+import nl.rgomiddelharnis.a6.po.R.string;
 
 /**
  * Verzorgt het inloggen.
