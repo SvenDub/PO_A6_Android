@@ -1,6 +1,7 @@
 
 package nl.rgomiddelharnis.a6.po;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -94,9 +95,25 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * @param wachtwoord {@link String} Het wachtwoord.
      * @param site {@link String} De url van de site om te gebruiken.
      */
-    public void login(int id, String gebruikersnaam, String wachtwoord, String site) {
-        // TODO: Voeg gebruiker toe
+    public boolean login(int id, String gebruikersnaam, String wachtwoord, String site) {
 
+        // Waardes om toe te voegen
+        ContentValues values = new ContentValues();
+        values.put(KEY_ID, id);
+        values.put(KEY_GEBRUIKER, gebruikersnaam);
+        values.put(KEY_WACHTWOORD, wachtwoord);
+        values.put(KEY_SITE, site);
+        
+        // Voer query uit
+        SQLiteDatabase db = getWritableDatabase();
+        long result = db.insert(TABLE_LOGIN, null, values);
+        
+        // Controleer of toevoegen gelukt is
+        if (result != -1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
