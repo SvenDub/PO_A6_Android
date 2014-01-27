@@ -94,6 +94,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * @param gebruikersnaam {@link String} De gebruikersnaam.
      * @param wachtwoord {@link String} Het wachtwoord.
      * @param site {@link String} De url van de site om te gebruiken.
+     * 
+     * @return {@link Boolean} True als er ingelogd is.
      */
     public boolean login(int id, String gebruikersnaam, String wachtwoord, String site) {
 
@@ -114,6 +116,27 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         } else {
             return false;
         }
+    }
+    
+    /**
+     * Logt een gebruiker uit.
+     * 
+     * @return {@link Boolean} True als er uitgelogd is.
+     */
+    public boolean logout() {
+        
+        // Voer query uit
+        String query = "DELETE * FROM " + TABLE_LOGIN;
+        SQLiteDatabase db = getWritableDatabase();
+        db.rawQuery(query, null);
+        
+        // Controleer of de gebruiker nog steeds ingelogd is
+        if (isGebruikerIngelogd()) {
+            return false;
+        } else {
+            return true;
+        }
+        
     }
 
 }
