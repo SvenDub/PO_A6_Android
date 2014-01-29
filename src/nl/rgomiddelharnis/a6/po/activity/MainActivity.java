@@ -7,14 +7,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 
 import nl.rgomiddelharnis.a6.po.DatabaseHandler;
 import nl.rgomiddelharnis.a6.po.R;
-import nl.rgomiddelharnis.a6.po.R.id;
-import nl.rgomiddelharnis.a6.po.R.layout;
-import nl.rgomiddelharnis.a6.po.R.menu;
 import nl.rgomiddelharnis.a6.po.fragment.TafelsFragment;
 
 /**
@@ -22,7 +18,7 @@ import nl.rgomiddelharnis.a6.po.fragment.TafelsFragment;
  * 
  * @author Sven Dubbeld <sven.dubbeld1@gmail.com>
  */
-public class MainActivity extends SherlockFragmentActivity {
+public class MainActivity extends ProgressFragmentActivity {
 
     /**
      * Log op DEBUG niveau.
@@ -70,7 +66,7 @@ public class MainActivity extends SherlockFragmentActivity {
         if (mDb.isGebruikerIngelogd()) {
 
             // Gebruiker is ingelogd
-            
+
             // Stel de layout in
             setContentView(R.layout.activity_main);
 
@@ -86,15 +82,15 @@ public class MainActivity extends SherlockFragmentActivity {
             fragmentTransaction.commit();
 
         } else {
-            
+
             // Gebruiker is niet ingelogd
-            
+
             // Start LoginActivity
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
-            
+
         }
 
     }

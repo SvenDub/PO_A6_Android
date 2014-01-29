@@ -8,14 +8,9 @@ import android.support.v4.app.FragmentTransaction;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.ActionBar.TabListener;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 
 import nl.rgomiddelharnis.a6.po.R;
-import nl.rgomiddelharnis.a6.po.R.id;
-import nl.rgomiddelharnis.a6.po.R.layout;
-import nl.rgomiddelharnis.a6.po.R.menu;
-import nl.rgomiddelharnis.a6.po.R.string;
 import nl.rgomiddelharnis.a6.po.fragment.BestellijstFragment;
 import nl.rgomiddelharnis.a6.po.fragment.DrankFragment;
 import nl.rgomiddelharnis.a6.po.fragment.HoofdgerechtFragment;
@@ -31,7 +26,7 @@ import nl.rgomiddelharnis.a6.po.fragment.VoorgerechtFragment;
  * 
  * @author Sven Dubbeld <sven.dubbeld1@gmail.com>
  */
-public class BeheerTafelActivity extends SherlockFragmentActivity implements TabListener {
+public class BeheerTafelActivity extends ProgressFragmentActivity implements TabListener {
 
     /**
      * Tag voor in logs.
