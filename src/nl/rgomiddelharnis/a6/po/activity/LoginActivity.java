@@ -9,22 +9,24 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
 import nl.rgomiddelharnis.a6.po.R;
-import nl.rgomiddelharnis.a6.po.R.id;
-import nl.rgomiddelharnis.a6.po.R.layout;
-import nl.rgomiddelharnis.a6.po.R.menu;
-import nl.rgomiddelharnis.a6.po.R.string;
+import nl.rgomiddelharnis.a6.po.task.LoginTask;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Verzorgt het inloggen.
  * 
  * @author Sven Dubbeld <sven.dubbeld1@gmail.com>
  */
-public class LoginActivity extends SherlockFragmentActivity {
+public class LoginActivity extends ProgressFragmentActivity {
 
     /**
      * Tag voor in logs.
@@ -56,7 +58,8 @@ public class LoginActivity extends SherlockFragmentActivity {
         mTxtServer.setOnEditorActionListener(getOnEditorActionListener());
         mTxtGebruiker.setOnEditorActionListener(getOnEditorActionListener());
         mTxtWachtwoord.setOnEditorActionListener(getOnEditorActionListener());
-        mTxtWachtwoord.setImeActionLabel(getText(R.string.action_login), EditorInfo.IME_ACTION_DONE);
+        mTxtWachtwoord
+                .setImeActionLabel(getText(R.string.action_login), EditorInfo.IME_ACTION_DONE);
 
     }
 
@@ -81,12 +84,41 @@ public class LoginActivity extends SherlockFragmentActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-    
+
     /**
      * Checkt de logingegevens en logt de gebruiker in.
      */
-    private boolean login() {
-        return false;
+    @SuppressWarnings("unchecked")
+    private void login() {
+
+        String url = mTxtServer.getText().toString();
+
+        // Voeg een afsluitende slash toe aan de URL
+        if (!url.endsWith("/")) {
+            url += "/";
+        }
+
+        // Voeg de locatie van de mobiele API toe aan de URL
+        url += "mobile.php";
+
+        // Gebruik HTTP zolang HTTPS nog niet ondersteund wordt
+        if (url.startsWith("/")) {
+            url = url.substring(1);
+        } else if (url.startsWith("https://")) {
+            url.replaceFirst("https://", "http://");
+        } else if (url.startsWith("http://")) {
+
+        } else {
+            url = "http://" + url;
+        }
+
+        // Bereid de verbindingsparameters voor
+        List<NameValuePair> params = new ArrayList<NameValuePair>(3);
+        params.add(new BasicNameValuePair("tag", "login"));
+        params.add(new BasicNameValuePair("username", mTxtGebruiker.getText().toString()));
+        params.add(new BasicNameValuePair("password", mTxtWachtwoord.getText().toString()));
+
+        new LoginTask(this, url).execute(params);
     }
 
     /**

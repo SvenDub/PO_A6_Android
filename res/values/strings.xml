@@ -21,12 +21,15 @@
     <string name="kies_tafel">Choose a table:</string>
 
     <!-- TafelsFragment -->
-    <string name="list_tafels_empty">No tables found.</string>
+    <string name="list_tafels_empty">No tables found</string>
 
     <!-- LoginActivity -->
     <string name="server">Server</string>
     <string name="gebruikersnaam">Username</string>
     <string name="wachtwoord">Password</string>
+    <string name="login_success">Log in successful</string>
+    <string name="invalid_login">Log in invalid</string>
+    <string name="server_error">A server error has occurred</string>
     
     <!-- BeheerTafelActivity -->
     <string name="voorgerecht">Entree</string>

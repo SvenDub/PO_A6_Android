@@ -30,6 +30,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public static final String KEY_GEBRUIKER = "gebruikersnaam";
     public static final String KEY_WACHTWOORD = "wachtwoord";
     public static final String KEY_SITE = "site";
+    
+    public static final String KEY_SUCCESS = "success";
 
     /**
      * Maakt een nieuwe <code>DatabaseHandler</code> aan om verbindingen met de
@@ -99,6 +101,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      */
     public boolean login(int id, String gebruikersnaam, String wachtwoord, String site) {
 
+        // Log de vorige gebruiker uit
+        logout();
+        
         // Waardes om toe te voegen
         ContentValues values = new ContentValues();
         values.put(KEY_ID, id);

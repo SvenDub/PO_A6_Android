@@ -8,6 +8,9 @@
         android:minSdkVersion="8"
         android:targetSdkVersion="19" />
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -24,13 +27,13 @@
         </activity>
         <activity
             android:name="nl.rgomiddelharnis.a6.po.activity.LoginActivity"
-            android:label="@string/title_activity_login"
-            android:exported="true" ><!-- TODO: Verwijderen na debug -->
+            android:exported="true"
+            android:label="@string/title_activity_login" > <!-- TODO: Verwijderen na debug -->
         </activity>
         <activity
-        android:name="nl.rgomiddelharnis.a6.po.activity.BeheerTafelActivityeheerTafelActivity"
-            android:label="@string/title_activity_beheer_tafel" 
-            android:exported="true" ><!-- TODO: Verwijderen na debug -->
+            android:name="nl.rgomiddelharnis.a6.po.activity.BeheerTafelActivity"
+            android:exported="true"
+            android:label="@string/title_activity_beheer_tafel" > <!-- TODO: Verwijderen na debug -->
         </activity>
     </application>
 

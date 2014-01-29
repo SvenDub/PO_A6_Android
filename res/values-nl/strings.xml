@@ -21,12 +21,15 @@
     <string name="kies_tafel">Kies een tafel:</string>
 
     <!-- TafelsFragment -->
-    <string name="list_tafels_empty">Geen tafels gevonden.</string>
+    <string name="list_tafels_empty">Geen tafels gevonden</string>
 
     <!-- LoginActivity -->
     <string name="server">Server</string>
     <string name="gebruikersnaam">Gebruikersnaam</string>
     <string name="wachtwoord">Wachtwoord</string>
+    <string name="login_success">Login succesvol</string>
+    <string name="invalid_login">Login incorrect</string>
+    <string name="server_error">Er is een serverfout opgetreden</string>
 
     <!-- BeheerTafelActivity -->
     <string name="voorgerecht">Voorgerecht</string>
