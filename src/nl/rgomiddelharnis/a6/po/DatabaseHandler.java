@@ -131,7 +131,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public boolean logout() {
         
         // Voer query uit
-        String query = "DELETE * FROM " + TABLE_LOGIN;
+        String query = "DELETE FROM " + TABLE_LOGIN;
         SQLiteDatabase db = getWritableDatabase();
         db.rawQuery(query, null);
         

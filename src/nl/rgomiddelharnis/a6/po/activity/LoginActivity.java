@@ -115,8 +115,8 @@ public class LoginActivity extends ProgressFragmentActivity {
         // Bereid de verbindingsparameters voor
         List<NameValuePair> params = new ArrayList<NameValuePair>(3);
         params.add(new BasicNameValuePair("tag", "login"));
-        params.add(new BasicNameValuePair("username", mTxtGebruiker.getText().toString()));
-        params.add(new BasicNameValuePair("password", mTxtWachtwoord.getText().toString()));
+        params.add(new BasicNameValuePair("gebruikersnaam", mTxtGebruiker.getText().toString()));
+        params.add(new BasicNameValuePair("wachtwoord", mTxtWachtwoord.getText().toString()));
 
         new LoginTask(this, url).execute(params);
     }
