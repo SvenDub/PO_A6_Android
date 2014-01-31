@@ -55,6 +55,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         // Maak tabellen aan
         db.execSQL(CREATE_LOGIN_TABLE);
+        db.close();
     }
 
     /**
@@ -81,6 +82,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // Tel het aantal rijen
         int rows = cursor.getCount();
 
+        cursor.close();
+        db.close();
+        
         if (rows > 0) {
             return true;
         } else {
@@ -115,6 +119,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = getWritableDatabase();
         long result = db.insert(TABLE_LOGIN, null, values);
         
+        db.close();
+        
         // Controleer of toevoegen gelukt is
         if (result != -1) {
             return true;
@@ -134,6 +140,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String query = "DELETE FROM " + TABLE_LOGIN;
         SQLiteDatabase db = getWritableDatabase();
         db.rawQuery(query, null);
+        
+        db.close();
         
         // Controleer of de gebruiker nog steeds ingelogd is
         if (isGebruikerIngelogd()) {
