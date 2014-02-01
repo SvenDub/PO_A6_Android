@@ -11,9 +11,16 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import nl.rgomiddelharnis.a6.po.DatabaseHandler;
 import nl.rgomiddelharnis.a6.po.R;
 import nl.rgomiddelharnis.a6.po.fragment.TafelsFragment;
+import nl.rgomiddelharnis.a6.po.task.TafelStatusTask;
 
 /**
  * Beginscherm van de app.
@@ -83,6 +90,8 @@ public class MainActivity extends ProgressFragmentActivity {
                     tafelsFragment);
             fragmentTransaction.commit();
 
+            refresh();
+            
         } else {
 
             // Gebruiker is niet ingelogd
@@ -137,8 +146,25 @@ public class MainActivity extends ProgressFragmentActivity {
                     
                 }
                 return true;
+            case R.id.action_refresh: // Vernieuw
+                refresh();
         }
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Vernieuwt de lijst met tafels.
+     */
+    @SuppressWarnings("unused")
+    private void refresh() {
+        
+        // Bereid de verbindingsparameters voor
+        List<NameValuePair> params = new ArrayList<NameValuePair>(3);
+        params.add(new BasicNameValuePair("tag", "tafel_status"));
+        params.add(new BasicNameValuePair("gebruikersnaam", mDb.getGebruikersnaam()));
+        params.add(new BasicNameValuePair("wachtwoord", mDb.getWachtwoord()));
+        
+        new TafelStatusTask(this).execute(params);
+    }
+    
 }

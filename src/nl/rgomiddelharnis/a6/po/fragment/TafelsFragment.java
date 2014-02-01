@@ -9,6 +9,7 @@ import android.widget.SimpleAdapter;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 
+import nl.rgomiddelharnis.a6.po.DatabaseHandler;
 import nl.rgomiddelharnis.a6.po.R;
 import nl.rgomiddelharnis.a6.po.R.id;
 import nl.rgomiddelharnis.a6.po.R.layout;
@@ -31,6 +32,8 @@ public class TafelsFragment extends SherlockListFragment {
      */
     private static final String TAG = "TafelsFragment";
 
+    DatabaseHandler mDb;
+    
     public TafelsFragment() {
         // TODO Auto-generated constructor stub
     }
@@ -42,19 +45,14 @@ public class TafelsFragment extends SherlockListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        // Dummy data.
-        // TODO: Verkrijg data van database.
-        ArrayList<Map<String, String>> data = new ArrayList<Map<String, String>>();
-        for (int i = 1; i < 20; i++) {
-            HashMap<String, String> item = new HashMap<String, String>();
-            item.put("id", Integer.toString(i));
-            item.put("status", "free");
-            data.add(item);
-        }
+        mDb = new DatabaseHandler(getSherlockActivity());
+        
+        // Verkrijg data van database
+        ArrayList<Map<String, String>> data = mDb.getTafels();
 
         // Gegevens om te gebruiken...
         String[] from = {
-                "id", "status"
+                DatabaseHandler.KEY_ID, DatabaseHandler.KEY_STATUS
         };
 
         // ... en toe te voegen aan deze velden.

@@ -9,6 +9,7 @@
     <string name="action_settings">Instellingen</string>
     <string name="action_logout">Uitloggen</string>
     <string name="action_login">Inloggen</string>
+    <string name="action_refresh">Vernieuwen</string>
 
     <!-- tmp -->
     <string name="hello_world">Hallo wereld!</string>
@@ -24,14 +25,14 @@
 
     <!-- TafelsFragment -->
     <string name="list_tafels_empty">Geen tafels gevonden</string>
+    <string name="tafel_vrij">Vrij</string>
+    <string name="tafel_bezet">Bezet</string>
 
     <!-- LoginActivity -->
     <string name="server">Server</string>
     <string name="gebruikersnaam">Gebruikersnaam</string>
     <string name="wachtwoord">Wachtwoord</string>
     <string name="login_success">Login succesvol</string>
-    <string name="invalid_login">Login incorrect</string>
-    <string name="server_error">Er is een serverfout opgetreden</string>
 
     <!-- BeheerTafelActivity -->
     <string name="voorgerecht">Voorgerecht</string>
@@ -39,5 +40,10 @@
     <string name="nagerecht">Nagerecht</string>
     <string name="drank">Drank</string>
     <string name="bestellijst">Bestellijst</string>
+    
+    <!-- Tasks -->
+    <string name="error_tag">Onbekende tag</string>
+    <string name="server_error">Er is een serverfout opgetreden</string>
+    <string name="invalid_login">Login incorrect</string>
 
 </resources>

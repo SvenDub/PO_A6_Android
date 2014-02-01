@@ -7,6 +7,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Beheert alle verbindingen met de database.
  * 
@@ -28,6 +32,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * De tabel om te gebruiken voor het inloggen.
      */
     public static final String TABLE_LOGIN = "login";
+    /**
+     * De tabel om alle beschikbare tafels in op te slaan.
+     */
+    public static final String TABLE_TAFEL = "tafelnummer";
 
     /**
      * De key voor id.
@@ -45,12 +53,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * De key voor site.
      */
     public static final String KEY_SITE = "site";
-    
+    /**
+     * De key voor de status.
+     */
+    public static final String KEY_STATUS = "status";
     /**
      * De key om succes aan te tonen.
      */
     public static final String KEY_SUCCESS = "success";
+    /**
+     * De key om een error aan te tonen.
+     */
+    public static final String KEY_ERROR = "error";
 
+    Context mContext;
+    
     /**
      * Maakt een nieuwe <code>DatabaseHandler</code> aan om verbindingen met de
      * database te beheren.
@@ -59,6 +76,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      */
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        mContext = context;
     }
 
     /**
@@ -70,10 +88,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_LOGIN + "(" + KEY_ID
                 + " INTEGER PRIMARY KEY, " + KEY_GEBRUIKER + " TEXT UNIQUE, " + KEY_WACHTWOORD
                 + " TEXT," + KEY_SITE + " TEXT" + ")";
+        String CREATE_TAFEL_TABLE = "CREATE TABLE " + TABLE_TAFEL + "(" + KEY_ID
+                + " INTEGER PRIMARY KEY, " + KEY_STATUS + " INTEGER" + ")";
 
         // Maak tabellen aan
         db.execSQL(CREATE_LOGIN_TABLE);
-        db.close();
+        db.execSQL(CREATE_TAFEL_TABLE);
     }
 
     /**
@@ -168,5 +188,149 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         
     }
+    
+    /**
+     * Haalt de URL van de site op van de gebruiker.
+     * 
+     * @return {@link String} De URL van de site.
+     */
+    public String getURL() {
+        
+        // Voer query uit
+        String query = "SELECT " + KEY_SITE + " FROM " + TABLE_LOGIN;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        
+        // Haal gegevens op
+        cursor.moveToFirst();
+        String site = cursor.getString(cursor.getColumnIndexOrThrow(KEY_SITE));
+        
+        cursor.close();
+        db.close();
+        
+        return site;
+    }
+    
+    /**
+     * Haalt de gebruikersnaam op van de gebruiker.
+     * 
+     * @return {@link String} De gebruikersnaam.
+     */
+    public String getGebruikersnaam() {
+     
+        // Voer query uit
+        String query = "SELECT " + KEY_GEBRUIKER + " FROM " + TABLE_LOGIN;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        
+        // Haal gegevens op
+        cursor.moveToFirst();
+        String gebruikersnaam = cursor.getString(cursor.getColumnIndexOrThrow(KEY_GEBRUIKER));
+        
+        cursor.close();
+        db.close();
+        
+        return gebruikersnaam;
+    }
+    
+    /**
+     * Haalt het wachtwoord op van de gebruiker.
+     * 
+     * @return {@link String} Het wachtwoord.
+     */
+    public String getWachtwoord() {
+        
+        // Voer query uit
+        String query = "SELECT " + KEY_WACHTWOORD + " FROM " + TABLE_LOGIN;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        
+        // Haal gegevens op
+        cursor.moveToFirst();
+        String wachtwoord = cursor.getString(cursor.getColumnIndexOrThrow(KEY_WACHTWOORD));
+        
+        cursor.close();
+        db.close();
+        
+        return wachtwoord;
+    }
+    
+    /**
+     * Voeg een nieuwe tafel toe.
+     * 
+     * @param id {@link Integer} Het nummer van de tafel.
+     * @param status {@link Integer} De status van de tafel. 0 is vrij, 1 is bezet.
+     * 
+     * @return {@link Boolean} True als de tafel is toegevoegd
+     */
+    public boolean voegTafelToe(int id, int status) {
+        
+        // Waardes om toe te voegen
+        ContentValues values = new ContentValues();
+        values.put(KEY_ID, id);
+        values.put(KEY_STATUS, status);
+        
+        // Voer query uit
+        SQLiteDatabase db = getWritableDatabase();
+        long result = db.insert(TABLE_TAFEL, null, values);
+        
+        db.close();
+        
+        // Controleer of het toevoegen gelukt is
+        if (result != -1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
+    /**
+     * Verwijder alle tafels uit de database.
+     * 
+     * @return {@link Boolean} True als de tafels verwijderd zijn.
+     */
+    public boolean leegTafels() {
+        
+        // Voer query uit
+        SQLiteDatabase db = getWritableDatabase();
+        int result = db.delete(TABLE_TAFEL, "1", null);
+        
+        db.close();
+        
+        // Controleer of uitloggen gelukt is
+        if (result > 0) {
+           return true; 
+        } else {
+            return false;
+        }
+        
+    }
+    
+    public ArrayList<Map<String, String>> getTafels() {
+        ArrayList<Map<String, String>> tafels = new ArrayList<Map<String,String>>();
+        
+        // Voer query uit
+        String query = "SELECT " + KEY_ID + ", " + KEY_STATUS + " FROM " + TABLE_TAFEL;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        
+        // Haal gegevens op
+        while (cursor.moveToNext()) {
+            HashMap<String, String> tafel = new HashMap<String, String>();
+            tafel.put(KEY_ID, Integer.toString(cursor.getInt(cursor.getColumnIndexOrThrow(KEY_ID))));
+            if (cursor.getInt(cursor.getColumnIndexOrThrow(KEY_STATUS)) == 0) {
+                tafel.put(KEY_STATUS, mContext.getString(R.string.tafel_vrij));
+            } else {
+                tafel.put(KEY_STATUS, mContext.getString(R.string.tafel_bezet));
+            }
+            tafels.add(tafel);
+        }
+        
+        cursor.close();
+        db.close();
+        
+        return tafels;
+        
+    }
+    
 }
