@@ -24,13 +24,31 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      */
     public static final int DATABASE_VERSION = 1;
 
+    /**
+     * De tabel om te gebruiken voor het inloggen.
+     */
     public static final String TABLE_LOGIN = "login";
 
+    /**
+     * De key voor id.
+     */
     public static final String KEY_ID = "id";
+    /**
+     * De key voor gebruikersnaam.
+     */
     public static final String KEY_GEBRUIKER = "gebruikersnaam";
+    /**
+     * De key voor wachtwoord.
+     */
     public static final String KEY_WACHTWOORD = "wachtwoord";
+    /**
+     * De key voor site.
+     */
     public static final String KEY_SITE = "site";
     
+    /**
+     * De key om succes aan te tonen.
+     */
     public static final String KEY_SUCCESS = "success";
 
     /**
