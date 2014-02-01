@@ -306,6 +306,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         
     }
     
+    /**
+     * Haal alle tafels op uit de database.
+     * 
+     * De status wordt weergegeven als localized string.
+     * 
+     * @return
+     */
     public ArrayList<Map<String, String>> getTafels() {
         ArrayList<Map<String, String>> tafels = new ArrayList<Map<String,String>>();
         
