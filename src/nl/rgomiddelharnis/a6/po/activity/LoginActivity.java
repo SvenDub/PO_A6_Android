@@ -105,7 +105,7 @@ public class LoginActivity extends ProgressFragmentActivity {
         if (url.startsWith("/")) {
             url = url.substring(1);
         } else if (url.startsWith("https://")) {
-            url.replaceFirst("https://", "http://");
+            url = url.replaceFirst("https://", "http://");
         } else if (url.startsWith("http://")) {
 
         } else {
