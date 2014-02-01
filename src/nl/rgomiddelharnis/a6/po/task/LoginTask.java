@@ -50,9 +50,9 @@ public class LoginTask extends AsyncTask<List<NameValuePair>, Void, JSONObject> 
     String error = null;
     String url = "";
 
-    Context context;
-    ProgressFragmentActivity activity;
-    DatabaseHandler db;
+    Context mContext;
+    ProgressFragmentActivity mActivity;
+    DatabaseHandler mDb;
 
     /**
      * Start een nieuwe <code>LoginTask</code> om de gebruiker in te loggen.
@@ -61,9 +61,9 @@ public class LoginTask extends AsyncTask<List<NameValuePair>, Void, JSONObject> 
      * @param url {@link String} De URL om te gebruiken.
      */
     public LoginTask(Context context, String url) {
-        this.context = context;
+        this.mContext = context;
         this.url = url;
-        db = new DatabaseHandler(context);
+        mDb = new DatabaseHandler(context);
     }
 
     /**
@@ -72,9 +72,9 @@ public class LoginTask extends AsyncTask<List<NameValuePair>, Void, JSONObject> 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        activity = (ProgressFragmentActivity) context;
-        activity.setIndeterminate(true);
-        activity.showProgressBar();
+        mActivity = (ProgressFragmentActivity) mContext;
+        mActivity.setIndeterminate(true);
+        mActivity.showProgressBar();
 
     }
 
@@ -170,34 +170,34 @@ public class LoginTask extends AsyncTask<List<NameValuePair>, Void, JSONObject> 
                     JSONObject json_user = result.getJSONObject("user");
 
                     // Log de gebruiker in
-                    db.login(json_user.getInt(DatabaseHandler.KEY_ID),
+                    mDb.login(json_user.getInt(DatabaseHandler.KEY_ID),
                             json_user.getString(DatabaseHandler.KEY_GEBRUIKER),
                             json_user.getString(DatabaseHandler.KEY_WACHTWOORD),
                             url);
 
                     // Meld dat het inloggen gelukt is
-                    Toast toast = Toast.makeText(context, R.string.login_success,
+                    Toast toast = Toast.makeText(mContext, R.string.login_success,
                             Toast.LENGTH_SHORT);
                     toast.show();
 
                     // Start MainActivity
-                    Intent main = new Intent(context,
+                    Intent main = new Intent(mContext,
                             MainActivity.class);
 
                     main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    context.startActivity(main);
+                    mContext.startActivity(main);
 
-                    ((ProgressFragmentActivity) context).finish();
+                    ((ProgressFragmentActivity) mContext).finish();
 
                 } else {
 
                     // Login niet correct
 
                     // Meld dat het inloggen niet gelukt is
-                    Toast toast = Toast.makeText(context, R.string.invalid_login,
+                    Toast toast = Toast.makeText(mContext, R.string.invalid_login,
                             Toast.LENGTH_SHORT);
                     toast.show();
-                    Log.e(TAG, context.getString(R.string.invalid_login));
+                    Log.e(TAG, mContext.getString(R.string.invalid_login));
 
                 }
 
@@ -211,13 +211,13 @@ public class LoginTask extends AsyncTask<List<NameValuePair>, Void, JSONObject> 
             // Errors
 
             // Meld dat het inloggen niet gelukt is
-            Toast toast = Toast.makeText(context, R.string.server_error, Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(mContext, R.string.server_error, Toast.LENGTH_SHORT);
             toast.show();
             Log.e(TAG, error);
 
         }
 
         // Verberg ProgressBar
-        activity.hideProgressBar();
+        mActivity.hideProgressBar();
     }
 }
