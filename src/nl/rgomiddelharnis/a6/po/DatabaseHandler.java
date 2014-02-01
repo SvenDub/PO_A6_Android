@@ -137,17 +137,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public boolean logout() {
         
         // Voer query uit
-        String query = "DELETE FROM " + TABLE_LOGIN;
         SQLiteDatabase db = getWritableDatabase();
-        db.rawQuery(query, null);
+        int result = db.delete(TABLE_LOGIN, "1", null);
         
         db.close();
         
-        // Controleer of de gebruiker nog steeds ingelogd is
-        if (isGebruikerIngelogd()) {
-            return false;
+        // Controleer of uitloggen gelukt is
+        if (result > 0) {
+           return true; 
         } else {
-            return true;
+            return false;
         }
         
     }

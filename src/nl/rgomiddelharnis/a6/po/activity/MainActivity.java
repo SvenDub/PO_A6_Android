@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 
 import nl.rgomiddelharnis.a6.po.DatabaseHandler;
 import nl.rgomiddelharnis.a6.po.R;
@@ -102,6 +104,41 @@ public class MainActivity extends ProgressFragmentActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getSupportMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    /**
+     * Verwerkt het gedrag van de knoppen in het menu.
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_logout: // Logout
+                if (mDb.logout()) {
+
+                    // Gebruiker is niet meer ingelogd
+
+                    // Meld dat het uitloggen gelukt is
+                    Toast toast = Toast.makeText(getApplicationContext(), R.string.logout_success, Toast.LENGTH_SHORT);
+                    toast.show();
+                    
+                    // Start LoginActivity
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    finish();
+                    
+                } else {
+                    
+                    // Gebruiker is nog steeds ingelogd
+                    
+                    // Meld dat het uitloggen niet gelukt is
+                    Toast toast = Toast.makeText(getApplicationContext(), R.string.logout_fail, Toast.LENGTH_SHORT);
+                    toast.show();
+                    
+                }
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }

@@ -19,6 +19,8 @@
 
     <!-- MainActivity -->
     <string name="kies_tafel">Kies een tafel:</string>
+    <string name="logout_success">Uitloggen succesvol</string>
+    <string name="logout_fail">Uitloggen mislukt</string>
 
     <!-- TafelsFragment -->
     <string name="list_tafels_empty">Geen tafels gevonden</string>

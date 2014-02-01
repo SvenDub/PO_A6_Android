@@ -19,6 +19,8 @@
 
     <!-- MainActivity -->
     <string name="kies_tafel">Choose a table:</string>
+    <string name="logout_success">Log out successful</string>
+    <string name="logout_fail">Log out failed</string>
 
     <!-- TafelsFragment -->
     <string name="list_tafels_empty">No tables found</string>
