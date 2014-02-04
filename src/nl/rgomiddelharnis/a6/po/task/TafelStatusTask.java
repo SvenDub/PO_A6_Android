@@ -189,7 +189,7 @@ public class TafelStatusTask extends AsyncTask<List<NameValuePair>, Void, JSONOb
                         
                         TafelsFragment tafelsFragment = new TafelsFragment();
                         
-                        fragmentTransaction.add(R.id.fragment_tafels, tafelsFragment);
+                        fragmentTransaction.replace(R.id.fragment_tafels, tafelsFragment);
                         fragmentTransaction.commit();
                     }
                 } else {
