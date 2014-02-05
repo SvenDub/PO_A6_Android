@@ -313,8 +313,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * 
      * @return
      */
-    public ArrayList<Map<String, String>> getTafels() {
-        ArrayList<Map<String, String>> tafels = new ArrayList<Map<String,String>>();
+    public ArrayList<Map<String, Object>> getTafels() {
+        ArrayList<Map<String, Object>> tafels = new ArrayList<Map<String, Object>>();
         
         // Voer query uit
         String query = "SELECT " + KEY_ID + ", " + KEY_STATUS + " FROM " + TABLE_TAFEL;
@@ -323,12 +323,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         
         // Haal gegevens op
         while (cursor.moveToNext()) {
-            HashMap<String, String> tafel = new HashMap<String, String>();
+            Map<String, Object> tafel = new HashMap<String, Object>();
             tafel.put(KEY_ID, Integer.toString(cursor.getInt(cursor.getColumnIndexOrThrow(KEY_ID))));
             if (cursor.getInt(cursor.getColumnIndexOrThrow(KEY_STATUS)) == 0) {
-                tafel.put(KEY_STATUS, mContext.getString(R.string.tafel_vrij));
+                tafel.put(KEY_STATUS, R.drawable.ic_tafel_vrij);
             } else {
-                tafel.put(KEY_STATUS, mContext.getString(R.string.tafel_bezet));
+                tafel.put(KEY_STATUS, R.drawable.ic_tafel_bezet);
             }
             tafels.add(tafel);
         }

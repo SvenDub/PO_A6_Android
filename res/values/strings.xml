@@ -25,8 +25,7 @@
 
     <!-- TafelsFragment -->
     <string name="list_tafels_empty">No tables found</string>
-    <string name="tafel_vrij">Free</string>
-    <string name="tafel_bezet">Occupied</string>
+    <string name="tafel_status">Table status</string>
 
     <!-- LoginActivity -->
     <string name="server">Server</string>

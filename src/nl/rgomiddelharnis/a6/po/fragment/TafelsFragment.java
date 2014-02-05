@@ -48,7 +48,7 @@ public class TafelsFragment extends SherlockListFragment {
         mDb = new DatabaseHandler(getSherlockActivity());
         
         // Verkrijg data van database
-        ArrayList<Map<String, String>> data = mDb.getTafels();
+        ArrayList<Map<String, Object>> data = mDb.getTafels();
 
         // Gegevens om te gebruiken...
         String[] from = {
@@ -57,7 +57,7 @@ public class TafelsFragment extends SherlockListFragment {
 
         // ... en toe te voegen aan deze velden.
         int[] to = {
-                R.id.lbl_tafel_nr, R.id.lbl_tafel_status
+                R.id.lbl_tafel_nr, R.id.img_tafel_status
         };
 
         // Maak een SimpleAdapter aan voor het verwerken van de gegevens.
