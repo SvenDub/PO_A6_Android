@@ -4,13 +4,17 @@ package nl.rgomiddelharnis.a6.po.activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.ActionBar.TabListener;
 import com.actionbarsherlock.view.Menu;
 
+import nl.rgomiddelharnis.a6.po.DatabaseHandler;
 import nl.rgomiddelharnis.a6.po.R;
+import nl.rgomiddelharnis.a6.po.adapter.BeheerTafelPagerAdapter;
 import nl.rgomiddelharnis.a6.po.fragment.BestellijstFragment;
 import nl.rgomiddelharnis.a6.po.fragment.DrankFragment;
 import nl.rgomiddelharnis.a6.po.fragment.HoofdgerechtFragment;
@@ -36,6 +40,12 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
     private static final String TAG = "BeheerTafelActivity";
 
     ActionBar mActionBar;
+    
+    int mTafel;
+    
+    // Pager
+    BeheerTafelPagerAdapter mPagerAdapter;
+    ViewPager mViewPager;
 
     // Fragments
     VoorgerechtFragment mVoorgerechtFragment;
@@ -54,11 +64,11 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
     Tab mTabBestellijst;
 
     // Tab positions
-    final int TAB_VOORGERECHT_POS = 0;
-    final int TAB_HOOFDGERECHT_POS = 1;
-    final int TAB_NAGERECHT_POS = 2;
-    final int TAB_DRANK_POS = 3;
-    final int TAB_BESTELLIJST_POS = 4;
+    public static final int TAB_VOORGERECHT_POS = 0;
+    public static final int TAB_HOOFDGERECHT_POS = 1;
+    public static final int TAB_NAGERECHT_POS = 2;
+    public static final int TAB_DRANK_POS = 3;
+    public static final int TAB_BESTELLIJST_POS = 4;
 
     /**
      * <p>
@@ -77,37 +87,66 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mActionBar = getSupportActionBar();
-        mFragmentManager = getSupportFragmentManager();
+        // Haal het meegegeven tafelnummer op
+        mTafel = getIntent().getIntExtra(DatabaseHandler.KEY_ID, -1);
+        
+        if (mTafel != -1) {
+        
+            // Er is een tafelnummer meegegeven
+            
+            mActionBar = getSupportActionBar();
+            mFragmentManager = getSupportFragmentManager();
 
-        // Stel de layout in
-        setContentView(R.layout.activity_beheer_tafel);
+            // Stel de layout in
+            setContentView(R.layout.activity_beheer_tafel);
 
-        // Maak de Fragments aan
-        mVoorgerechtFragment = new VoorgerechtFragment();
-        mHoofdgerechtFragment = new HoofdgerechtFragment();
-        mNagerechtFragment = new NagerechtFragment();
-        mDrankFragment = new DrankFragment();
-        mBestellijstFragment = new BestellijstFragment();
+            // Maak de PagerAdapter aan
+            mPagerAdapter = new BeheerTafelPagerAdapter(mFragmentManager, mTafel);
 
-        // Maak de Tabs aan
-        mTabVoorgerecht = mActionBar.newTab().setTabListener(this).setText(R.string.voorgerecht);
-        mTabHoofdgerecht = mActionBar.newTab().setTabListener(this).setText(R.string.hoofdgerecht);
-        mTabNagerecht = mActionBar.newTab().setTabListener(this).setText(R.string.nagerecht);
-        mTabDrank = mActionBar.newTab().setTabListener(this).setText(R.string.drank);
-        mTabBestellijst = mActionBar.newTab().setTabListener(this).setText(R.string.bestellijst);
+            // Stel de adapter in
+            mViewPager = (ViewPager) findViewById(R.id.pager);
+            mViewPager.setAdapter(mPagerAdapter);
+            mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+                /**
+                 * Wisselt naar een Tab zodra het bijbehorende Fragment wordt
+                 * geselecteerd.
+                 */
+                @Override
+                public void onPageSelected(int position) {
+                    mActionBar.setSelectedNavigationItem(position);
+                }
+            });
 
-        // Voeg de tabs toe aan de ActionBar
-        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        mActionBar.addTab(mTabVoorgerecht, TAB_VOORGERECHT_POS, true);
-        mActionBar.addTab(mTabHoofdgerecht, TAB_HOOFDGERECHT_POS);
-        mActionBar.addTab(mTabNagerecht, TAB_NAGERECHT_POS);
-        mActionBar.addTab(mTabDrank, TAB_DRANK_POS);
-        mActionBar.addTab(mTabBestellijst, TAB_BESTELLIJST_POS);
+            // Maak de Tabs aan
+            mTabVoorgerecht = mActionBar.newTab().setTabListener(this)
+                    .setText(R.string.voorgerecht);
+            mTabHoofdgerecht = mActionBar.newTab().setTabListener(this)
+                    .setText(R.string.hoofdgerecht);
+            mTabNagerecht = mActionBar.newTab().setTabListener(this).setText(R.string.nagerecht);
+            mTabDrank = mActionBar.newTab().setTabListener(this).setText(R.string.drank);
+            mTabBestellijst = mActionBar.newTab().setTabListener(this)
+                    .setText(R.string.bestellijst);
 
-        // Voeg het VoorgerechtFragment toe
-        mFragmentManager.beginTransaction().replace(R.id.fragment_beheer_tafel,
-                mVoorgerechtFragment).commit();
+            // Voeg de tabs toe aan de ActionBar
+            mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+            mActionBar.addTab(mTabVoorgerecht, TAB_VOORGERECHT_POS, true);
+            mActionBar.addTab(mTabHoofdgerecht, TAB_HOOFDGERECHT_POS);
+            mActionBar.addTab(mTabNagerecht, TAB_NAGERECHT_POS);
+            mActionBar.addTab(mTabDrank, TAB_DRANK_POS);
+            mActionBar.addTab(mTabBestellijst, TAB_BESTELLIJST_POS);
+            
+            // Stel de titel in
+            mActionBar.setTitle(getString(R.string.tafel) + " " + mTafel);
+            
+        } else {
+            
+            // Geen tafelnummer meegegeven
+            
+            // Stel de gebruiker op de hoogte
+            Toast toast = Toast.makeText(getApplicationContext(), R.string.geen_tafel_geselecteerd, Toast.LENGTH_SHORT);
+            toast.show();
+            
+        }
     }
 
     /**
@@ -124,30 +163,7 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
      */
     @Override
     public void onTabSelected(Tab tab, FragmentTransaction ft) {
-        switch (tab.getPosition()) {
-            case TAB_VOORGERECHT_POS:
-                mFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_beheer_tafel, mVoorgerechtFragment).commit();
-                break;
-            case TAB_HOOFDGERECHT_POS:
-                mFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_beheer_tafel, mHoofdgerechtFragment).commit();
-                break;
-            case TAB_NAGERECHT_POS:
-                mFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_beheer_tafel, mNagerechtFragment).commit();
-                break;
-            case TAB_DRANK_POS:
-                mFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_beheer_tafel, mDrankFragment).commit();
-                break;
-            case TAB_BESTELLIJST_POS:
-                mFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_beheer_tafel, mBestellijstFragment).commit();
-                break;
-            default:
-                break;
-        }
+        mViewPager.setCurrentItem(tab.getPosition());
     }
 
     @Override

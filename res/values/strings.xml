@@ -10,13 +10,14 @@
     <string name="action_logout">Log out</string>
     <string name="action_login">Log in</string>
     <string name="action_refresh">Refresh</string>
+    <string name="action_prijs">-,--</string>
 
     <!-- tmp -->
     <string name="hello_world">Hello world!</string>
 
     <!-- Activity titels -->
     <string name="title_activity_login">POS-system</string>
-    <string name="title_activity_beheer_tafel">BeheerTafelActivity</string>
+    <string name="title_activity_beheer_tafel">Manage table</string>
 
     <!-- MainActivity -->
     <string name="kies_tafel">Choose a table:</string>
@@ -39,6 +40,8 @@
     <string name="nagerecht">Dessert</string>
     <string name="drank">Drinks</string>
     <string name="bestellijst">Order list</string>
+    <string name="tafel">Table</string>
+    <string name="geen_tafel_geselecteerd">No table selected</string>
     
     <!-- Tasks -->
     <string name="error_tag">Unknown tag</string>
