@@ -1,10 +1,12 @@
 
 package nl.rgomiddelharnis.a6.po.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
 import com.actionbarsherlock.app.SherlockListFragment;
@@ -13,6 +15,7 @@ import nl.rgomiddelharnis.a6.po.DatabaseHandler;
 import nl.rgomiddelharnis.a6.po.R;
 import nl.rgomiddelharnis.a6.po.R.id;
 import nl.rgomiddelharnis.a6.po.R.layout;
+import nl.rgomiddelharnis.a6.po.activity.BeheerTafelActivity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,5 +71,22 @@ public class TafelsFragment extends SherlockListFragment {
         setListAdapter(adapter);
 
         return inflater.inflate(R.layout.fragment_tafels, container, false);
+    }
+    
+    /**
+     * Start {@link BeheerTafelActivity} voor de gekozen tafel.
+     */
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+        
+        @SuppressWarnings("unchecked")
+        // Haal het opgegeven item op
+        Map<String, Object> selected = (Map<String, Object>) getListAdapter().getItem(position);
+        
+        // Start Activity
+        Intent intent = new Intent(getActivity(), BeheerTafelActivity.class);
+        intent.putExtra(DatabaseHandler.KEY_ID, Integer.parseInt(selected.get(DatabaseHandler.KEY_ID).toString()));
+        startActivity(intent);
     }
 }
