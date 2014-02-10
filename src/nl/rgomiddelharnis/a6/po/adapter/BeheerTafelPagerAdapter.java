@@ -4,6 +4,7 @@ package nl.rgomiddelharnis.a6.po.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 
 import nl.rgomiddelharnis.a6.po.activity.BeheerTafelActivity;
 import nl.rgomiddelharnis.a6.po.fragment.BestellijstFragment;
@@ -21,6 +22,7 @@ import nl.rgomiddelharnis.a6.po.fragment.VoorgerechtFragment;
 public class BeheerTafelPagerAdapter extends FragmentPagerAdapter {
 
     int mTafel;
+    FragmentManager mFragmentManager;
 
     /**
      * Maak een nieuwe <code>BeheerTafelPagerAdapter</code> aan om de
@@ -32,6 +34,7 @@ public class BeheerTafelPagerAdapter extends FragmentPagerAdapter {
     public BeheerTafelPagerAdapter(FragmentManager fm, int tafel) {
         super(fm);
         mTafel = tafel;
+        mFragmentManager = fm;
     }
 
     /**
@@ -62,6 +65,16 @@ public class BeheerTafelPagerAdapter extends FragmentPagerAdapter {
         }
     }
 
+    public boolean reloadAll() {
+        FragmentTransaction ft = mFragmentManager.beginTransaction();
+        for (int i = 0; i <= BeheerTafelActivity.TAB_BESTELLIJST_POS; i++) {
+            ft.detach(getItem(i));
+            ft.attach(getItem(i));
+        }
+        ft.commit();
+        return true;
+    }
+    
     /**
      * Haalt het aantal <code>Fragments</code> op. Dit is altijd <code>5</code>.
      */

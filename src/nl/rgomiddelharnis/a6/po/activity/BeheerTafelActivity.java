@@ -12,6 +12,12 @@ import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.ActionBar.TabListener;
 import com.actionbarsherlock.view.Menu;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import nl.rgomiddelharnis.a6.po.DatabaseHandler;
 import nl.rgomiddelharnis.a6.po.R;
 import nl.rgomiddelharnis.a6.po.adapter.BeheerTafelPagerAdapter;
@@ -20,6 +26,7 @@ import nl.rgomiddelharnis.a6.po.fragment.DrankFragment;
 import nl.rgomiddelharnis.a6.po.fragment.HoofdgerechtFragment;
 import nl.rgomiddelharnis.a6.po.fragment.NagerechtFragment;
 import nl.rgomiddelharnis.a6.po.fragment.VoorgerechtFragment;
+import nl.rgomiddelharnis.a6.po.task.ProductenTask;
 
 /**
  * Beheert de tafels.
@@ -102,7 +109,17 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
 
             // Maak de PagerAdapter aan
             mPagerAdapter = new BeheerTafelPagerAdapter(mFragmentManager, mTafel);
-
+            
+            // Haal producten op
+            DatabaseHandler mDb = new DatabaseHandler(getApplicationContext());
+            // Bereid de verbindingsparameters voor
+            List<NameValuePair> params = new ArrayList<NameValuePair>(3);
+            params.add(new BasicNameValuePair("tag", "producten"));
+            params.add(new BasicNameValuePair("gebruikersnaam", mDb.getGebruikersnaam()));
+            params.add(new BasicNameValuePair("wachtwoord", mDb.getWachtwoord()));
+            
+            new ProductenTask(this).execute(params);
+            
             // Stel de adapter in
             mViewPager = (ViewPager) findViewById(R.id.pager);
             mViewPager.setAdapter(mPagerAdapter);
@@ -176,6 +193,15 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
     public void onTabReselected(Tab tab, FragmentTransaction ft) {
         // TODO Auto-generated method stub
 
+    }
+    
+    /**
+     * Haalt de PagerAdapter op.
+     * 
+     * @return {@link BeheerTafelPagerAdapter} De PagerAdapter
+     */
+    public BeheerTafelPagerAdapter getPagerAdapter() {
+        return mPagerAdapter;
     }
 
 }
