@@ -36,7 +36,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * De tabel om alle beschikbare tafels in op te slaan.
      */
     public static final String TABLE_TAFEL = "tafelnummer";
-
+    /**
+     * De tabel om alle producten in op te slaan.
+     */
+    public static final String TABLE_PRODUCTEN = "producten";
+    
     /**
      * De key voor id.
      */
@@ -65,7 +69,23 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * De key om een error aan te tonen.
      */
     public static final String KEY_ERROR = "error";
-
+    /**
+     * De key voor categorienummer.
+     */
+    public static final String KEY_CATEGORIENR = "categorienummer";
+    /**
+     * De key voor gerecht.
+     */
+    public static final String KEY_GERECHT = "gerecht";
+    /**
+     * De key voor prijs.
+     */
+    public static final String KEY_PRIJS = "prijs";
+    /**
+     * De key voor actief.
+     */
+    public static final String KEY_ACTIEF = "actief";
+    
     Context mContext;
     
     /**
@@ -90,10 +110,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + " TEXT," + KEY_SITE + " TEXT" + ")";
         String CREATE_TAFEL_TABLE = "CREATE TABLE " + TABLE_TAFEL + "(" + KEY_ID
                 + " INTEGER PRIMARY KEY, " + KEY_STATUS + " INTEGER" + ")";
+        String CREATE_PRODUCTEN_TABLE = "CREATE TABLE " + TABLE_PRODUCTEN + "(" + KEY_ID
+                + " INTEGER PRIMARY KEY, " + KEY_CATEGORIENR + " INTEGER," + KEY_GERECHT + " TEXT,"
+                + KEY_PRIJS + " DOUBLE," + KEY_ACTIEF + " INTEGER" + ")";
 
         // Maak tabellen aan
         db.execSQL(CREATE_LOGIN_TABLE);
         db.execSQL(CREATE_TAFEL_TABLE);
+        db.execSQL(CREATE_PRODUCTEN_TABLE);
     }
 
     /**
@@ -256,7 +280,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
     
     /**
-     * Voeg een nieuwe tafel toe.
+     * Voegt een nieuwe tafel toe.
      * 
      * @param id {@link Integer} Het nummer van de tafel.
      * @param status {@link Integer} De status van de tafel. 0 is vrij, 1 is bezet.
@@ -285,7 +309,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     /**
-     * Verwijder alle tafels uit de database.
+     * Verwijdert alle tafels uit de database.
      * 
      * @return {@link Boolean} True als de tafels verwijderd zijn.
      */
@@ -297,7 +321,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         
         db.close();
         
-        // Controleer of uitloggen gelukt is
+        // Controleer of het verwijderen gelukt is
         if (result > 0) {
            return true; 
         } else {
@@ -307,7 +331,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
     
     /**
-     * Haal alle tafels op uit de database.
+     * Haalt alle tafels op uit de database.
      * 
      * De status wordt weergegeven als localized string.
      * 
@@ -337,6 +361,63 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
         
         return tafels;
+        
+    }
+    
+    /**
+     * Voegt een nieuw product toe.
+     * 
+     * @param id {@link Integer} Het nummer van het product.
+     * @param categorienr {@link Integer} Het nummer van de categorie.
+     * @param gerecht {@link String} De naam van het product.
+     * @param prijs {@link Double} De prijs van het product.
+     * @param actief {@link Integer} De status van het product, <code>true</code> is actief.
+     * 
+     * @return {@link Boolean} True als het product is toegevoegd.
+     */
+    public boolean voegProductToe(int id, int categorienr, String gerecht, double prijs, boolean actief) {
+        
+        // Waardes om toe te voegen
+        ContentValues values = new ContentValues();
+        values.put(KEY_ID, id);
+        values.put(KEY_CATEGORIENR, categorienr);
+        values.put(KEY_GERECHT, gerecht);
+        values.put(KEY_PRIJS, prijs);
+        values.put(KEY_ACTIEF, actief);
+        
+        // Voer query uit
+        SQLiteDatabase db = getWritableDatabase();
+        long result = db.insert(TABLE_PRODUCTEN, null, values);
+        
+        db.close();
+        
+        // Controleer of het toevoegen gelukt is
+        if (result != -1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * Verwijdert alle producten uit de database.
+     * 
+     * @return {@link Boolean} True als de producten verwijderd zijn.
+     */
+    public boolean leegProducten() {
+        
+        // Voer query uit
+        SQLiteDatabase db = getWritableDatabase();
+        int result = db.delete(TABLE_PRODUCTEN, "1", null);
+        
+        db.close();
+        
+        // Controleer of het verwijderen gelukt is
+        if (result > 0) {
+           return true; 
+        } else {
+            return false;
+        }
         
     }
     
