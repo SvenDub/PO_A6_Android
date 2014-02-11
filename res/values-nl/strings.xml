@@ -42,6 +42,7 @@
     <string name="bestellijst">Bestellijst</string>
     <string name="tafel">Tafel</string>
     <string name="geen_tafel_geselecteerd">Geen tafel geselecteerd</string>
+    <string name="list_gerecht_empty">Geen gerechten gevonden</string>
     
     <!-- Tasks -->
     <string name="error_tag">Onbekende tag</string>

@@ -7,6 +7,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -78,9 +80,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      */
     public static final String KEY_GERECHT = "gerecht";
     /**
-     * De key voor prijs.
+     * De key voor prijs als getal.
      */
     public static final String KEY_PRIJS = "prijs";
+    /**
+     * De key voor prijs als opgemaakte string.
+     */
+    public static final String KEY_PRIJS_FORMATTED = "prijs_format";
     /**
      * De key voor actief.
      */
@@ -418,6 +424,88 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         } else {
             return false;
         }
+        
+    }
+    
+    /**
+     * Haalt alle producten op uit de database.
+     * 
+     * @return
+     */
+    public ArrayList<Map<String, Object>> getProducten() {
+        ArrayList<Map<String, Object>> producten = new ArrayList<Map<String, Object>>();
+        
+        // Voer query uit
+        String query = "SELECT " + KEY_ID + ", " + KEY_CATEGORIENR + ", " + KEY_GERECHT + ", "
+                + KEY_PRIJS + ", " + KEY_ACTIEF + " FROM " + TABLE_PRODUCTEN + "ORDER BY " + KEY_GERECHT + " ASC";
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        // Haal gegevens op
+        while (cursor.moveToNext()) {
+            if (cursor.getInt(cursor.getColumnIndexOrThrow(KEY_ACTIEF)) == 1) {
+                Map<String, Object> product = new HashMap<String, Object>();
+                product.put(KEY_ID, cursor.getInt(cursor.getColumnIndexOrThrow(KEY_ID)));
+                product.put(KEY_CATEGORIENR,
+                        cursor.getInt(cursor.getColumnIndexOrThrow(KEY_CATEGORIENR)));
+                product.put(KEY_GERECHT,
+                        cursor.getString(cursor.getColumnIndexOrThrow(KEY_GERECHT)));
+                product.put(KEY_PRIJS, cursor.getDouble(cursor.getColumnIndexOrThrow(KEY_PRIJS)));
+                product.put(
+                        KEY_PRIJS_FORMATTED,
+                        NumberFormat.getCurrencyInstance().format(
+                                cursor.getDouble(cursor.getColumnIndexOrThrow(KEY_PRIJS))));
+                producten.add(product);
+            }
+        }
+        
+        cursor.close();
+        db.close();
+        
+        return producten;
+        
+    }
+    
+    /**
+     * Haalt alle producten op uit een bepaalde categorie uit de database.
+     * 
+     * @return
+     */
+    public ArrayList<Map<String, Object>> getProducten(int categorienr) {
+        ArrayList<Map<String, Object>> producten = new ArrayList<Map<String, Object>>();
+        
+        // Voer query uit
+        String query = "SELECT " + KEY_ID + ", " + KEY_CATEGORIENR + ", " + KEY_GERECHT + ", "
+                + KEY_PRIJS + ", " + KEY_ACTIEF + " FROM " + TABLE_PRODUCTEN + " WHERE "
+                + KEY_CATEGORIENR + "=? ORDER BY " + KEY_GERECHT + " ASC";
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, new String[] {
+            Integer.toString(categorienr)
+        });
+
+        // Haal gegevens op
+        while (cursor.moveToNext()) {
+            if (cursor.getInt(cursor.getColumnIndexOrThrow(KEY_ACTIEF)) == 1) {
+                Map<String, Object> product = new HashMap<String, Object>();
+                product.put(KEY_ID, cursor.getInt(cursor.getColumnIndexOrThrow(KEY_ID)));
+                product.put(KEY_CATEGORIENR,
+                        cursor.getInt(cursor.getColumnIndexOrThrow(KEY_CATEGORIENR)));
+                product.put(KEY_GERECHT,
+                        cursor.getString(cursor.getColumnIndexOrThrow(KEY_GERECHT)));
+                product.put(KEY_PRIJS, cursor
+                        .getDouble(cursor.getColumnIndexOrThrow(KEY_PRIJS)));
+                product.put(
+                        KEY_PRIJS_FORMATTED,
+                        NumberFormat.getCurrencyInstance().format(
+                                cursor.getDouble(cursor.getColumnIndexOrThrow(KEY_PRIJS))));
+                producten.add(product);
+            }
+        }
+        
+        cursor.close();
+        db.close();
+        
+        return producten;
         
     }
     

@@ -42,6 +42,7 @@
     <string name="bestellijst">Order list</string>
     <string name="tafel">Table</string>
     <string name="geen_tafel_geselecteerd">No table selected</string>
+    <string name="list_gerecht_empty">No products found</string>
     
     <!-- Tasks -->
     <string name="error_tag">Unknown tag</string>
