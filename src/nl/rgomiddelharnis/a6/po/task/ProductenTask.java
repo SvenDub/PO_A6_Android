@@ -181,12 +181,19 @@ public class ProductenTask extends AsyncTask<List<NameValuePair>, Void, JSONObje
 
                     }
 
-                    if (mActivity.getClass() == BeheerTafelActivity.class) {
+                    try {
 
-                        // Request kwam van BeheerTafelActivity dus herlaad het
-                        // Fragment
-                        ((BeheerTafelActivity) mActivity).getPagerAdapter().reloadAll();
+                        if (mActivity.getClass() == BeheerTafelActivity.class) {
 
+                            // Request kwam van BeheerTafelActivity dus herlaad
+                            // het
+                            // Fragment
+                            ((BeheerTafelActivity) mActivity).getPagerAdapter().reloadAll();
+
+                        }
+                        
+                    } catch (IllegalStateException e) {
+                        e.printStackTrace();
                     }
                 } else {
 

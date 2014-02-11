@@ -183,17 +183,25 @@ public class TafelStatusTask extends AsyncTask<List<NameValuePair>, Void, JSONOb
                         mDb.voegTafelToe(Integer.parseInt(id), Integer.parseInt(status));
                     }
                     
-                    if (mActivity.getClass() == MainActivity.class) {
-                        
-                        // Request kwam van MainActivity dus herlaad het Fragment
-                        
-                        FragmentManager fragmentManager = mActivity.getSupportFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        
-                        TafelsFragment tafelsFragment = new TafelsFragment();
-                        
-                        fragmentTransaction.replace(R.id.fragment_tafels, tafelsFragment);
-                        fragmentTransaction.commit();
+                    try {
+
+                        if (mActivity.getClass() == MainActivity.class) {
+
+                            // Request kwam van MainActivity dus herlaad het
+                            // Fragment
+
+                            FragmentManager fragmentManager = mActivity.getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager
+                                    .beginTransaction();
+
+                            TafelsFragment tafelsFragment = new TafelsFragment();
+
+                            fragmentTransaction.replace(R.id.fragment_tafels, tafelsFragment);
+                            fragmentTransaction.commit();
+                        }
+
+                    } catch (IllegalStateException e) {
+                        e.printStackTrace();
                     }
                 } else {
                     
