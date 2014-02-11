@@ -175,9 +175,9 @@ public class ProductenTask extends AsyncTask<List<NameValuePair>, Void, JSONObje
                         JSONObject product_data = json_producten.getJSONObject(id);
 
                         mDb.voegProductToe(Integer.parseInt(id),
-                                product_data.getInt("categorienr"),
+                                product_data.getInt("categorienummer"),
                                 product_data.getString("gerecht"), product_data.getDouble("prijs"),
-                                product_data.getBoolean("actief"));
+                                (product_data.getInt("actief") == 1));
 
                     }
 
