@@ -18,6 +18,7 @@
     <!-- Activity titels -->
     <string name="title_activity_login">Kassasysteem</string>
     <string name="title_activity_beheer_tafel">Beheer tafel</string>
+    <string name="title_activity_settings">Settings</string>
 
     <!-- MainActivity -->
     <string name="kies_tafel">Kies een tafel:</string>
@@ -43,6 +44,22 @@
     <string name="tafel">Tafel</string>
     <string name="geen_tafel_geselecteerd">Geen tafel geselecteerd</string>
     <string name="list_gerecht_empty">Geen gerechten gevonden</string>
+    
+    <!-- SettingsActivity -->
+    <string name="pref_header_general">Algemeen</string>
+    <string name="pref_currency_title">Valuta</string>
+    <string-array name="pref_currency_list_titles">
+        <item>Regionaal</item>
+        <item>Euro (&#8364;)</item>
+        <item>Dollar ($)</item>
+        <item>Pound (&#163;)</item>
+    </string-array>
+    <string-array name="pref_currency_list_values">
+        <item>default</item>
+        <item>euro</item>
+        <item>dollar</item>
+        <item>pound</item>
+    </string-array>
     
     <!-- Tasks -->
     <string name="error_tag">Onbekende tag</string>

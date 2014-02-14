@@ -135,6 +135,7 @@ public class MainActivity extends ProgressFragmentActivity {
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     finish();
+                    break;
                     
                 } else {
                     
@@ -148,6 +149,13 @@ public class MainActivity extends ProgressFragmentActivity {
                 return true;
             case R.id.action_refresh: // Vernieuw
                 refresh();
+                break;
+            case R.id.action_settings: // Settings
+                
+                // Start SettingsActivity
+                Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(intent);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

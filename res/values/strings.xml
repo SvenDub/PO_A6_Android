@@ -18,6 +18,7 @@
     <!-- Activity titels -->
     <string name="title_activity_login">POS-system</string>
     <string name="title_activity_beheer_tafel">Manage table</string>
+    <string name="title_activity_settings">Settings</string>
 
     <!-- MainActivity -->
     <string name="kies_tafel">Choose a table:</string>
@@ -43,6 +44,22 @@
     <string name="tafel">Table</string>
     <string name="geen_tafel_geselecteerd">No table selected</string>
     <string name="list_gerecht_empty">No products found</string>
+    
+    <!-- SettingsActivity -->
+    <string name="pref_header_general">General</string>
+    <string name="pref_currency_title">Currency</string>
+    <string-array name="pref_currency_list_titles">
+        <item>Locale default</item>
+        <item>Dollar ($)</item>
+        <item>Euro (&#8364;)</item>
+        <item>Pound (&#163;)</item>
+    </string-array>
+    <string-array name="pref_currency_list_values">
+        <item>default</item>
+        <item>dollar</item>
+        <item>euro</item>
+        <item>pound</item>
+    </string-array>
     
     <!-- Tasks -->
     <string name="error_tag">Unknown tag</string>

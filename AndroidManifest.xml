@@ -35,6 +35,14 @@
             android:exported="true"
             android:label="@string/title_activity_beheer_tafel" > <!-- TODO: Verwijderen na debug -->
         </activity>
+        <activity
+            android:name="nl.rgomiddelharnis.a6.po.activity.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName="nl.rgomiddelharnis.a6.po.activity.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="nl.rgomiddelharnis.a6.po.activity.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
