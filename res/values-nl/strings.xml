@@ -55,10 +55,10 @@
         <item>Pound (&#163;)</item>
     </string-array>
     <string-array name="pref_currency_list_values">
-        <item>default</item>
-        <item>euro</item>
-        <item>dollar</item>
-        <item>pound</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
     </string-array>
     
     <!-- Tasks -->

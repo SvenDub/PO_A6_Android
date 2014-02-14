@@ -6,11 +6,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.preference.PreferenceManager;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -42,7 +45,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * De tabel om alle producten in op te slaan.
      */
     public static final String TABLE_PRODUCTEN = "producten";
-    
+
     /**
      * De key voor id.
      */
@@ -91,9 +94,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * De key voor actief.
      */
     public static final String KEY_ACTIEF = "actief";
-    
+
     Context mContext;
-    
+
     /**
      * Maakt een nieuwe <code>DatabaseHandler</code> aan om verbindingen met de
      * database te beheren.
@@ -152,7 +155,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         cursor.close();
         db.close();
-        
+
         if (rows > 0) {
             return true;
         } else {
@@ -168,27 +171,26 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * @param gebruikersnaam {@link String} De gebruikersnaam.
      * @param wachtwoord {@link String} Het wachtwoord.
      * @param site {@link String} De url van de site om te gebruiken.
-     * 
      * @return {@link Boolean} True als er ingelogd is.
      */
     public boolean login(int id, String gebruikersnaam, String wachtwoord, String site) {
 
         // Log de vorige gebruiker uit
         logout();
-        
+
         // Waardes om toe te voegen
         ContentValues values = new ContentValues();
         values.put(KEY_ID, id);
         values.put(KEY_GEBRUIKER, gebruikersnaam);
         values.put(KEY_WACHTWOORD, wachtwoord);
         values.put(KEY_SITE, site);
-        
+
         // Voer query uit
         SQLiteDatabase db = getWritableDatabase();
         long result = db.insert(TABLE_LOGIN, null, values);
-        
+
         db.close();
-        
+
         // Controleer of toevoegen gelukt is
         if (result != -1) {
             return true;
@@ -196,116 +198,116 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             return false;
         }
     }
-    
+
     /**
      * Logt een gebruiker uit.
      * 
      * @return {@link Boolean} True als er uitgelogd is.
      */
     public boolean logout() {
-        
+
         // Voer query uit
         SQLiteDatabase db = getWritableDatabase();
         int result = db.delete(TABLE_LOGIN, "1", null);
-        
+
         db.close();
-        
+
         // Controleer of uitloggen gelukt is
         if (result > 0) {
-           return true; 
+            return true;
         } else {
             return false;
         }
-        
+
     }
-    
+
     /**
      * Haalt de URL van de site op van de gebruiker.
      * 
      * @return {@link String} De URL van de site.
      */
     public String getURL() {
-        
+
         // Voer query uit
         String query = "SELECT " + KEY_SITE + " FROM " + TABLE_LOGIN;
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
-        
+
         // Haal gegevens op
         cursor.moveToFirst();
         String site = cursor.getString(cursor.getColumnIndexOrThrow(KEY_SITE));
-        
+
         cursor.close();
         db.close();
-        
+
         return site;
     }
-    
+
     /**
      * Haalt de gebruikersnaam op van de gebruiker.
      * 
      * @return {@link String} De gebruikersnaam.
      */
     public String getGebruikersnaam() {
-     
+
         // Voer query uit
         String query = "SELECT " + KEY_GEBRUIKER + " FROM " + TABLE_LOGIN;
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
-        
+
         // Haal gegevens op
         cursor.moveToFirst();
         String gebruikersnaam = cursor.getString(cursor.getColumnIndexOrThrow(KEY_GEBRUIKER));
-        
+
         cursor.close();
         db.close();
-        
+
         return gebruikersnaam;
     }
-    
+
     /**
      * Haalt het wachtwoord op van de gebruiker.
      * 
      * @return {@link String} Het wachtwoord.
      */
     public String getWachtwoord() {
-        
+
         // Voer query uit
         String query = "SELECT " + KEY_WACHTWOORD + " FROM " + TABLE_LOGIN;
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
-        
+
         // Haal gegevens op
         cursor.moveToFirst();
         String wachtwoord = cursor.getString(cursor.getColumnIndexOrThrow(KEY_WACHTWOORD));
-        
+
         cursor.close();
         db.close();
-        
+
         return wachtwoord;
     }
-    
+
     /**
      * Voegt een nieuwe tafel toe.
      * 
      * @param id {@link Integer} Het nummer van de tafel.
-     * @param status {@link Integer} De status van de tafel. 0 is vrij, 1 is bezet.
-     * 
+     * @param status {@link Integer} De status van de tafel. 0 is vrij, 1 is
+     *            bezet.
      * @return {@link Boolean} True als de tafel is toegevoegd
      */
     public boolean voegTafelToe(int id, int status) {
-        
+
         // Waardes om toe te voegen
         ContentValues values = new ContentValues();
         values.put(KEY_ID, id);
         values.put(KEY_STATUS, status);
-        
+
         // Voer query uit
         SQLiteDatabase db = getWritableDatabase();
         long result = db.insert(TABLE_TAFEL, null, values);
-        
+
         db.close();
-        
+
         // Controleer of het toevoegen gelukt is
         if (result != -1) {
             return true;
@@ -320,37 +322,36 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * @return {@link Boolean} True als de tafels verwijderd zijn.
      */
     public boolean leegTafels() {
-        
+
         // Voer query uit
         SQLiteDatabase db = getWritableDatabase();
         int result = db.delete(TABLE_TAFEL, "1", null);
-        
+
         db.close();
-        
+
         // Controleer of het verwijderen gelukt is
         if (result > 0) {
-           return true; 
+            return true;
         } else {
             return false;
         }
-        
+
     }
-    
+
     /**
-     * Haalt alle tafels op uit de database.
-     * 
-     * De status wordt weergegeven als localized string.
+     * Haalt alle tafels op uit de database. De status wordt weergegeven als
+     * localized string.
      * 
      * @return
      */
     public ArrayList<Map<String, Object>> getTafels() {
         ArrayList<Map<String, Object>> tafels = new ArrayList<Map<String, Object>>();
-        
+
         // Voer query uit
         String query = "SELECT " + KEY_ID + ", " + KEY_STATUS + " FROM " + TABLE_TAFEL;
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
-        
+
         // Haal gegevens op
         while (cursor.moveToNext()) {
             Map<String, Object> tafel = new HashMap<String, Object>();
@@ -362,14 +363,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             }
             tafels.add(tafel);
         }
-        
+
         cursor.close();
         db.close();
-        
+
         return tafels;
-        
+
     }
-    
+
     /**
      * Voegt een nieuw product toe.
      * 
@@ -377,12 +378,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * @param categorienr {@link Integer} Het nummer van de categorie.
      * @param gerecht {@link String} De naam van het product.
      * @param prijs {@link Double} De prijs van het product.
-     * @param actief {@link Integer} De status van het product, <code>true</code> is actief.
-     * 
+     * @param actief {@link Integer} De status van het product,
+     *            <code>true</code> is actief.
      * @return {@link Boolean} True als het product is toegevoegd.
      */
-    public boolean voegProductToe(int id, int categorienr, String gerecht, double prijs, boolean actief) {
-        
+    public boolean voegProductToe(int id, int categorienr, String gerecht, double prijs,
+            boolean actief) {
+
         // Waardes om toe te voegen
         ContentValues values = new ContentValues();
         values.put(KEY_ID, id);
@@ -390,13 +392,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_GERECHT, gerecht);
         values.put(KEY_PRIJS, prijs);
         values.put(KEY_ACTIEF, actief);
-        
+
         // Voer query uit
         SQLiteDatabase db = getWritableDatabase();
         long result = db.insert(TABLE_PRODUCTEN, null, values);
-        
+
         db.close();
-        
+
         // Controleer of het toevoegen gelukt is
         if (result != -1) {
             return true;
@@ -404,29 +406,29 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             return false;
         }
     }
-    
+
     /**
      * Verwijdert alle producten uit de database.
      * 
      * @return {@link Boolean} True als de producten verwijderd zijn.
      */
     public boolean leegProducten() {
-        
+
         // Voer query uit
         SQLiteDatabase db = getWritableDatabase();
         int result = db.delete(TABLE_PRODUCTEN, "1", null);
-        
+
         db.close();
-        
+
         // Controleer of het verwijderen gelukt is
         if (result > 0) {
-           return true; 
+            return true;
         } else {
             return false;
         }
-        
+
     }
-    
+
     /**
      * Haalt alle producten op uit de database.
      * 
@@ -434,10 +436,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      */
     public ArrayList<Map<String, Object>> getProducten() {
         ArrayList<Map<String, Object>> producten = new ArrayList<Map<String, Object>>();
-        
+
+        // Haal valuta op
+        NumberFormat numberFormat = Functions.getNumberFormat(mContext);
+
         // Voer query uit
         String query = "SELECT " + KEY_ID + ", " + KEY_CATEGORIENR + ", " + KEY_GERECHT + ", "
-                + KEY_PRIJS + ", " + KEY_ACTIEF + " FROM " + TABLE_PRODUCTEN + "ORDER BY " + KEY_GERECHT + " ASC";
+                + KEY_PRIJS + ", " + KEY_ACTIEF + " FROM " + TABLE_PRODUCTEN + "ORDER BY "
+                + KEY_GERECHT + " ASC";
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
 
@@ -453,19 +459,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 product.put(KEY_PRIJS, cursor.getDouble(cursor.getColumnIndexOrThrow(KEY_PRIJS)));
                 product.put(
                         KEY_PRIJS_FORMATTED,
-                        NumberFormat.getCurrencyInstance().format(
+                        numberFormat.format(
                                 cursor.getDouble(cursor.getColumnIndexOrThrow(KEY_PRIJS))));
                 producten.add(product);
             }
         }
-        
+
         cursor.close();
         db.close();
-        
+
         return producten;
-        
+
     }
-    
+
     /**
      * Haalt alle producten op uit een bepaalde categorie uit de database.
      * 
@@ -473,14 +479,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      */
     public ArrayList<Map<String, Object>> getProducten(int categorienr) {
         ArrayList<Map<String, Object>> producten = new ArrayList<Map<String, Object>>();
-        
+
+        // Haal valuta op
+        NumberFormat numberFormat = Functions.getNumberFormat(mContext);
+
         // Voer query uit
         String query = "SELECT " + KEY_ID + ", " + KEY_CATEGORIENR + ", " + KEY_GERECHT + ", "
                 + KEY_PRIJS + ", " + KEY_ACTIEF + " FROM " + TABLE_PRODUCTEN + " WHERE "
                 + KEY_CATEGORIENR + "=? ORDER BY " + KEY_GERECHT + " ASC";
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(query, new String[] {
-            Integer.toString(categorienr)
+                Integer.toString(categorienr)
         });
 
         // Haal gegevens op
@@ -496,17 +505,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                         .getDouble(cursor.getColumnIndexOrThrow(KEY_PRIJS)));
                 product.put(
                         KEY_PRIJS_FORMATTED,
-                        NumberFormat.getCurrencyInstance().format(
+                        numberFormat.format(
                                 cursor.getDouble(cursor.getColumnIndexOrThrow(KEY_PRIJS))));
                 producten.add(product);
             }
         }
-        
+
         cursor.close();
         db.close();
-        
+
         return producten;
-        
+
     }
-    
+
 }

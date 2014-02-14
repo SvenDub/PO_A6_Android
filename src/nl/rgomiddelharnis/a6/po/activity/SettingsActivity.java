@@ -61,8 +61,8 @@ public class SettingsActivity extends PreferenceActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                // Ga 1 Activity terug
-                NavUtils.navigateUpFromSameTask(this);
+                // Sluit Activity
+                finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -128,7 +128,8 @@ public class SettingsActivity extends PreferenceActivity {
     }
 
     /**
-     * Vangt wijzigingen in de instellingen op en werkt de samenvatting van de instelling bij.
+     * Vangt wijzigingen in de instellingen op en werkt de samenvatting van de
+     * instelling bij.
      */
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
         /**
@@ -139,9 +140,9 @@ public class SettingsActivity extends PreferenceActivity {
             String stringValue = value.toString();
 
             if (preference instanceof ListPreference) {
-                
+
                 // ListPreference aangepast
-                
+
                 ListPreference listPreference = (ListPreference) preference;
                 int index = listPreference.findIndexOfValue(stringValue);
 
@@ -154,7 +155,7 @@ public class SettingsActivity extends PreferenceActivity {
             } else {
 
                 // Andere Preference aangepast
-                
+
                 // Laat waarde zien in samenvatting
                 preference.setSummary(stringValue);
             }
@@ -186,7 +187,7 @@ public class SettingsActivity extends PreferenceActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            
+
             // Voeg 'general' opties toe
             addPreferencesFromResource(R.xml.pref_general);
             bindPreferenceSummaryToValue(findPreference("currency"));
