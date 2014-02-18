@@ -163,7 +163,7 @@ public class MainActivity extends ProgressFragmentActivity {
     /**
      * Vernieuwt de lijst met tafels.
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings("unchecked")
     private void refresh() {
         
         // Bereid de verbindingsparameters voor

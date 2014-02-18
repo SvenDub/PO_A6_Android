@@ -90,6 +90,7 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
      * <li>{@link BestellijstFragment}</li>
      * </ul>
      */
+    @SuppressWarnings("unchecked")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

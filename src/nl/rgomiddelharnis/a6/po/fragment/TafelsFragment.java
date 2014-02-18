@@ -13,12 +13,9 @@ import com.actionbarsherlock.app.SherlockListFragment;
 
 import nl.rgomiddelharnis.a6.po.DatabaseHandler;
 import nl.rgomiddelharnis.a6.po.R;
-import nl.rgomiddelharnis.a6.po.R.id;
-import nl.rgomiddelharnis.a6.po.R.layout;
 import nl.rgomiddelharnis.a6.po.activity.BeheerTafelActivity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
