@@ -52,7 +52,7 @@ public class TafelsFragment extends SherlockListFragment {
 
         // Gegevens om te gebruiken...
         String[] from = {
-                DatabaseHandler.KEY_ID, DatabaseHandler.KEY_STATUS
+                DatabaseHandler.KEY_TAFELNR, DatabaseHandler.KEY_STATUS
         };
 
         // ... en toe te voegen aan deze velden.
@@ -83,7 +83,7 @@ public class TafelsFragment extends SherlockListFragment {
         
         // Start Activity
         Intent intent = new Intent(getActivity(), BeheerTafelActivity.class);
-        intent.putExtra(DatabaseHandler.KEY_ID, Integer.parseInt(selected.get(DatabaseHandler.KEY_ID).toString()));
+        intent.putExtra(DatabaseHandler.KEY_TAFELNR, Integer.parseInt(selected.get(DatabaseHandler.KEY_TAFELNR).toString()));
         startActivity(intent);
     }
 }

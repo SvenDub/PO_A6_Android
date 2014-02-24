@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,6 +41,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * De tabel om alle producten in op te slaan.
      */
     public static final String TABLE_PRODUCTEN = "producten";
+    /**
+     * De tabel om alle bestellingen in op te slaan.
+     */
+    public static final String TABLE_BESTELLINGEN = "bestellingen";
 
     /**
      * De key voor id.
@@ -70,6 +75,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      */
     public static final String KEY_ERROR = "error";
     /**
+     * De key voor productnummer.
+     */
+    public static final String KEY_PRODUCTNR = "productnummer";
+    /**
      * De key voor categorienummer.
      */
     public static final String KEY_CATEGORIENR = "categorienummer";
@@ -89,6 +98,26 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * De key voor actief.
      */
     public static final String KEY_ACTIEF = "actief";
+    /**
+     * De key voor tafelnummer.
+     */
+    public static final String KEY_TAFELNR = "tafelnummer";
+    /**
+     * De key voor bestelnummer.
+     */
+    public static final String KEY_BESTELNR = "bestelnummer";
+    /**
+     * De key voor aantal.
+     */
+    public static final String KEY_AANTAL = "aantal";
+    /**
+     * De key voor opmerking.
+     */
+    public static final String KEY_OPMERKING = "opmerking";
+    /**
+     * De key voor datum.
+     */
+    public static final String KEY_DATUM = "datum";
 
     Context mContext;
 
@@ -112,16 +141,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_LOGIN + "(" + KEY_ID
                 + " INTEGER PRIMARY KEY, " + KEY_GEBRUIKER + " TEXT UNIQUE, " + KEY_WACHTWOORD
                 + " TEXT," + KEY_SITE + " TEXT" + ")";
-        String CREATE_TAFEL_TABLE = "CREATE TABLE " + TABLE_TAFEL + "(" + KEY_ID
+        String CREATE_TAFEL_TABLE = "CREATE TABLE " + TABLE_TAFEL + "(" + KEY_TAFELNR
                 + " INTEGER PRIMARY KEY, " + KEY_STATUS + " INTEGER" + ")";
-        String CREATE_PRODUCTEN_TABLE = "CREATE TABLE " + TABLE_PRODUCTEN + "(" + KEY_ID
+        String CREATE_PRODUCTEN_TABLE = "CREATE TABLE " + TABLE_PRODUCTEN + "(" + KEY_PRODUCTNR
                 + " INTEGER PRIMARY KEY, " + KEY_CATEGORIENR + " INTEGER," + KEY_GERECHT + " TEXT,"
                 + KEY_PRIJS + " DOUBLE," + KEY_ACTIEF + " INTEGER" + ")";
+        String CREATE_BESTELLINGEN_TABLE = "CREATE TABLE " + TABLE_BESTELLINGEN + "("
+                + KEY_BESTELNR + " INTEGER PRIMARY KEY, " + KEY_TAFELNR + " INTEGER, " + KEY_ID
+                + " INTEGER, " + KEY_PRODUCTNR + " INTEGER, " + KEY_AANTAL + " INTEGER, "
+                + KEY_OPMERKING + " TEXT, " + KEY_DATUM + " TEXT, " + KEY_STATUS + " INTEGER" + ")";
 
         // Maak tabellen aan
         db.execSQL(CREATE_LOGIN_TABLE);
         db.execSQL(CREATE_TAFEL_TABLE);
         db.execSQL(CREATE_PRODUCTEN_TABLE);
+        db.execSQL(CREATE_BESTELLINGEN_TABLE);
     }
 
     /**
@@ -285,16 +319,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     /**
      * Voegt een nieuwe tafel toe.
      * 
-     * @param id {@link Integer} Het nummer van de tafel.
+     * @param tafelnummer {@link Integer} Het nummer van de tafel.
      * @param status {@link Integer} De status van de tafel. 0 is vrij, 1 is
      *            bezet.
      * @return {@link Boolean} True als de tafel is toegevoegd
      */
-    public boolean voegTafelToe(int id, int status) {
+    public boolean voegTafelToe(int tafelnummer, int status) {
 
         // Waardes om toe te voegen
         ContentValues values = new ContentValues();
-        values.put(KEY_ID, id);
+        values.put(KEY_TAFELNR, tafelnummer);
         values.put(KEY_STATUS, status);
 
         // Voer query uit
@@ -343,14 +377,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         ArrayList<Map<String, Object>> tafels = new ArrayList<Map<String, Object>>();
 
         // Voer query uit
-        String query = "SELECT " + KEY_ID + ", " + KEY_STATUS + " FROM " + TABLE_TAFEL;
+        String query = "SELECT " + KEY_TAFELNR + ", " + KEY_STATUS + " FROM " + TABLE_TAFEL;
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
 
         // Haal gegevens op
         while (cursor.moveToNext()) {
             Map<String, Object> tafel = new HashMap<String, Object>();
-            tafel.put(KEY_ID, Integer.toString(cursor.getInt(cursor.getColumnIndexOrThrow(KEY_ID))));
+            tafel.put(KEY_TAFELNR,
+                    Integer.toString(cursor.getInt(cursor.getColumnIndexOrThrow(KEY_TAFELNR))));
             if (cursor.getInt(cursor.getColumnIndexOrThrow(KEY_STATUS)) == 0) {
                 tafel.put(KEY_STATUS, R.drawable.ic_tafel_vrij);
             } else {
@@ -369,7 +404,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     /**
      * Voegt een nieuw product toe.
      * 
-     * @param id {@link Integer} Het nummer van het product.
+     * @param productnummer {@link Integer} Het nummer van het product.
      * @param categorienr {@link Integer} Het nummer van de categorie.
      * @param gerecht {@link String} De naam van het product.
      * @param prijs {@link Double} De prijs van het product.
@@ -377,12 +412,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      *            <code>true</code> is actief.
      * @return {@link Boolean} True als het product is toegevoegd.
      */
-    public boolean voegProductToe(int id, int categorienr, String gerecht, double prijs,
+    public boolean voegProductToe(int productnummer, int categorienr, String gerecht, double prijs,
             boolean actief) {
 
         // Waardes om toe te voegen
         ContentValues values = new ContentValues();
-        values.put(KEY_ID, id);
+        values.put(KEY_PRODUCTNR, productnummer);
         values.put(KEY_CATEGORIENR, categorienr);
         values.put(KEY_GERECHT, gerecht);
         values.put(KEY_PRIJS, prijs);
@@ -436,7 +471,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         NumberFormat numberFormat = Functions.getNumberFormat(mContext);
 
         // Voer query uit
-        String query = "SELECT " + KEY_ID + ", " + KEY_CATEGORIENR + ", " + KEY_GERECHT + ", "
+        String query = "SELECT " + KEY_PRODUCTNR + ", " + KEY_CATEGORIENR + ", " + KEY_GERECHT
+                + ", "
                 + KEY_PRIJS + ", " + KEY_ACTIEF + " FROM " + TABLE_PRODUCTEN + "ORDER BY "
                 + KEY_GERECHT + " ASC";
         SQLiteDatabase db = getReadableDatabase();
@@ -446,7 +482,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         while (cursor.moveToNext()) {
             if (cursor.getInt(cursor.getColumnIndexOrThrow(KEY_ACTIEF)) == 1) {
                 Map<String, Object> product = new HashMap<String, Object>();
-                product.put(KEY_ID, cursor.getInt(cursor.getColumnIndexOrThrow(KEY_ID)));
+                product.put(KEY_PRODUCTNR,
+                        cursor.getInt(cursor.getColumnIndexOrThrow(KEY_PRODUCTNR)));
                 product.put(KEY_CATEGORIENR,
                         cursor.getInt(cursor.getColumnIndexOrThrow(KEY_CATEGORIENR)));
                 product.put(KEY_GERECHT,
@@ -479,7 +516,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         NumberFormat numberFormat = Functions.getNumberFormat(mContext);
 
         // Voer query uit
-        String query = "SELECT " + KEY_ID + ", " + KEY_CATEGORIENR + ", " + KEY_GERECHT + ", "
+        String query = "SELECT " + KEY_PRODUCTNR + ", " + KEY_CATEGORIENR + ", " + KEY_GERECHT
+                + ", "
                 + KEY_PRIJS + ", " + KEY_ACTIEF + " FROM " + TABLE_PRODUCTEN + " WHERE "
                 + KEY_CATEGORIENR + "=? ORDER BY " + KEY_GERECHT + " ASC";
         SQLiteDatabase db = getReadableDatabase();
@@ -491,7 +529,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         while (cursor.moveToNext()) {
             if (cursor.getInt(cursor.getColumnIndexOrThrow(KEY_ACTIEF)) == 1) {
                 Map<String, Object> product = new HashMap<String, Object>();
-                product.put(KEY_ID, cursor.getInt(cursor.getColumnIndexOrThrow(KEY_ID)));
+                product.put(KEY_PRODUCTNR,
+                        cursor.getInt(cursor.getColumnIndexOrThrow(KEY_PRODUCTNR)));
                 product.put(KEY_CATEGORIENR,
                         cursor.getInt(cursor.getColumnIndexOrThrow(KEY_CATEGORIENR)));
                 product.put(KEY_GERECHT,
@@ -513,4 +552,115 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     }
 
+    /**
+     * Voegt een nieuwe bestelling toe.
+     * 
+     * @param bestelnummer {@link Integer} Het nummer van de bestelling.
+     * @param tafelnummer {@link Integer} Het nummer van de tafel.
+     * @param inlog_id {@link Integer} Het id van de ober die de bestelling
+     *            heeft toegevoegd.
+     * @param product {@link Integer} Het nummer van het bestelde product.
+     * @param aantal_besteld {@link Integer} Het aantal bestelde producten.
+     * @param opmerking {@link String} Een eventuele opmerking.
+     * @param datum {@link String} De datum dat de bestelling is toegevoegd.
+     * @param status {@link Integer} De status van de bestelling.
+     * @return {@link Boolean} True als de bestelling is toegevoegd.
+     */
+    public boolean voegBestellingToe(int bestelnummer, int tafelnummer, int id, int product,
+            int aantal_besteld, String opmerking, String datum, int status) {
+
+        // Waardes om toe te voegen
+        ContentValues values = new ContentValues();
+        values.put(KEY_BESTELNR, bestelnummer);
+        values.put(KEY_TAFELNR, tafelnummer);
+        values.put(KEY_ID, id);
+        values.put(KEY_PRODUCTNR, product);
+        values.put(KEY_AANTAL, aantal_besteld);
+        values.put(KEY_OPMERKING, opmerking);
+        values.put(KEY_DATUM, datum);
+        values.put(KEY_STATUS, status);
+
+        // Voer query uit
+        SQLiteDatabase db = getWritableDatabase();
+        long result = db.insert(TABLE_BESTELLINGEN, null, values);
+
+        db.close();
+
+        // Controleer of het toevoegen gelukt is
+        if (result != -1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Verwijdert alle bestellingen uit de database.
+     * 
+     * @return {@link Boolean} True als de bestellingen verwijderd zijn.
+     */
+    public boolean leegBestellingen() {
+
+        // Voer query uit
+        SQLiteDatabase db = getWritableDatabase();
+        int result = db.delete(TABLE_BESTELLINGEN, "1", null);
+
+        db.close();
+
+        // Controleer of het verwijderen gelukt is
+        if (result > 0) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    /**
+     * Haalt alle bestellingen van een bepaalde tafel op uit de database.
+     * 
+     * @return
+     */
+    public ArrayList<Map<String, Object>> getBestellingen(int tafelnr) {
+        ArrayList<Map<String, Object>> bestellingen = new ArrayList<Map<String, Object>>();
+
+        // Voer query uit
+        String query = "SELECT " + KEY_BESTELNR + ", " + KEY_TAFELNR + ", " + KEY_ID
+                + ", " + KEY_PRODUCTNR + ", " + KEY_AANTAL + ", " + KEY_OPMERKING + ", "
+                + KEY_DATUM + ", " + KEY_STATUS + " FROM " + TABLE_BESTELLINGEN + " WHERE "
+                + KEY_TAFELNR + "=? ORDER BY " + KEY_BESTELNR + " ASC";
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, new String[] {
+                Integer.toString(tafelnr)
+        });
+
+        // Haal gegevens op
+        while (cursor.moveToNext()) {
+            if (cursor.getInt(cursor.getColumnIndexOrThrow(KEY_ACTIEF)) == 1) {
+                Map<String, Object> bestelling = new HashMap<String, Object>();
+                bestelling.put(KEY_BESTELNR,
+                        cursor.getInt(cursor.getColumnIndexOrThrow(KEY_BESTELNR)));
+                bestelling.put(KEY_TAFELNR,
+                        cursor.getInt(cursor.getColumnIndexOrThrow(KEY_TAFELNR)));
+                bestelling.put(KEY_ID, cursor.getInt(cursor.getColumnIndexOrThrow(KEY_ID)));
+                bestelling.put(KEY_PRODUCTNR,
+                        cursor.getInt(cursor.getColumnIndexOrThrow(KEY_PRODUCTNR)));
+                bestelling.put(KEY_AANTAL,
+                        cursor.getInt(cursor.getColumnIndexOrThrow(KEY_AANTAL)));
+                bestelling.put(KEY_OPMERKING,
+                        cursor.getString(cursor.getColumnIndexOrThrow(KEY_OPMERKING)));
+                bestelling.put(KEY_DATUM,
+                        cursor.getString(cursor.getColumnIndexOrThrow(KEY_DATUM)));
+                bestelling.put(KEY_STATUS,
+                        cursor.getInt(cursor.getColumnIndexOrThrow(KEY_STATUS)));
+                bestellingen.add(bestelling);
+            }
+        }
+
+        cursor.close();
+        db.close();
+
+        return bestellingen;
+
+    }
 }

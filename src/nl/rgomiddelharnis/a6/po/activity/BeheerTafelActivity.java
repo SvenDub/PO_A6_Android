@@ -26,6 +26,7 @@ import nl.rgomiddelharnis.a6.po.fragment.DrankFragment;
 import nl.rgomiddelharnis.a6.po.fragment.HoofdgerechtFragment;
 import nl.rgomiddelharnis.a6.po.fragment.NagerechtFragment;
 import nl.rgomiddelharnis.a6.po.fragment.VoorgerechtFragment;
+import nl.rgomiddelharnis.a6.po.task.BestellingenTask;
 import nl.rgomiddelharnis.a6.po.task.ProductenTask;
 
 /**
@@ -96,7 +97,7 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
         super.onCreate(savedInstanceState);
 
         // Haal het meegegeven tafelnummer op
-        mTafel = getIntent().getIntExtra(DatabaseHandler.KEY_ID, -1);
+        mTafel = getIntent().getIntExtra(DatabaseHandler.KEY_TAFELNR, -1);
         
         if (mTafel != -1) {
         
@@ -111,15 +112,15 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
             // Maak de PagerAdapter aan
             mPagerAdapter = new BeheerTafelPagerAdapter(mFragmentManager, mTafel);
             
-            // Haal producten op
+            // Haal bestellingen op
             DatabaseHandler mDb = new DatabaseHandler(getApplicationContext());
             // Bereid de verbindingsparameters voor
             List<NameValuePair> params = new ArrayList<NameValuePair>(3);
-            params.add(new BasicNameValuePair("tag", "producten"));
+            params.add(new BasicNameValuePair("tag", "bestellingen"));
             params.add(new BasicNameValuePair("gebruikersnaam", mDb.getGebruikersnaam()));
             params.add(new BasicNameValuePair("wachtwoord", mDb.getWachtwoord()));
             
-            new ProductenTask(this).execute(params);
+            new BestellingenTask(this).execute(params);
             
             // Stel de adapter in
             mViewPager = (ViewPager) findViewById(R.id.pager);
