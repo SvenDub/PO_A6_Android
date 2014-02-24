@@ -3,17 +3,13 @@ package nl.rgomiddelharnis.a6.po.task;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.widget.Toast;
 
 import nl.rgomiddelharnis.a6.po.DatabaseHandler;
 import nl.rgomiddelharnis.a6.po.R;
 import nl.rgomiddelharnis.a6.po.activity.BeheerTafelActivity;
-import nl.rgomiddelharnis.a6.po.activity.MainActivity;
 import nl.rgomiddelharnis.a6.po.activity.ProgressFragmentActivity;
-import nl.rgomiddelharnis.a6.po.fragment.TafelsFragment;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -21,7 +17,6 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
@@ -31,7 +26,6 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -172,28 +166,33 @@ public class BestellingenTask extends AsyncTask<List<NameValuePair>, Void, JSONO
                     // Response van server is goed
 
                     // Haal 'bestellingen' object op
-                    JSONObject json_bestellingen = result.getJSONObject("bestellingen");
-                    Iterator<?> bestellingen = json_bestellingen.keys();
+                    try {
+                        JSONObject json_bestellingen = result.getJSONObject("bestellingen");
+                        Iterator<?> bestellingen = json_bestellingen.keys();
 
-                    // Voeg bestellingen toe aan database
-                    mDb.leegBestellingen();
-                    while (bestellingen.hasNext()) {
-                        String bestelnummer = bestellingen.next().toString();
+                        // Voeg bestellingen toe aan database
+                        mDb.leegBestellingen();
+                        while (bestellingen.hasNext()) {
+                            String bestelnummer = bestellingen.next().toString();
 
-                        JSONObject besteldata = json_bestellingen.getJSONObject(bestelnummer);
+                            JSONObject besteldata = json_bestellingen.getJSONObject(bestelnummer);
 
-                        String tafelnummer = besteldata.getString("tafelnummer");
-                        String inlog_id = besteldata.getString("inlog_id");
-                        String product = besteldata.getString("product");
-                        String aantal_besteld = besteldata.getString("aantal_besteld");
-                        String opmerking = besteldata.getString("opmerking");
-                        String datum = besteldata.getString("datum");
-                        String status = besteldata.getString("status");
+                            String tafelnummer = besteldata.getString("tafelnummer");
+                            String inlog_id = besteldata.getString("inlog_id");
+                            String product = besteldata.getString("product");
+                            String aantal_besteld = besteldata.getString("aantal_besteld");
+                            String opmerking = besteldata.getString("opmerking");
+                            String datum = besteldata.getString("datum");
+                            String status = besteldata.getString("status");
 
-                        mDb.voegBestellingToe(Integer.parseInt(bestelnummer),
-                                Integer.parseInt(tafelnummer), Integer.parseInt(inlog_id),
-                                Integer.parseInt(product), Integer.parseInt(aantal_besteld),
-                                opmerking, datum, Integer.parseInt(status));
+                            mDb.voegBestellingToe(Integer.parseInt(bestelnummer),
+                                    Integer.parseInt(tafelnummer), Integer.parseInt(inlog_id),
+                                    Integer.parseInt(product), Integer.parseInt(aantal_besteld),
+                                    opmerking, datum, Integer.parseInt(status));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        mDb.leegBestellingen();
                     }
 
                     try {
