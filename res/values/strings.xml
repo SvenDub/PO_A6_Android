@@ -10,7 +10,7 @@
     <string name="action_logout">Log out</string>
     <string name="action_login">Log in</string>
     <string name="action_refresh">Refresh</string>
-    <string name="action_prijs">-,--</string>
+    <string name="action_beheer">Manage</string>
 
     <!-- tmp -->
     <string name="hello_world">Hello world!</string>
@@ -44,6 +44,9 @@
     <string name="tafel">Table</string>
     <string name="geen_tafel_geselecteerd">No table selected</string>
     <string name="list_gerecht_empty">No products found</string>
+    <string name="list_bestelling_empty">No orders placed</string>
+    <string name="activeer">Activate</string>
+    <string name="afrekenen">Pay</string>
     
     <!-- SettingsActivity -->
     <string name="pref_header_general">General</string>

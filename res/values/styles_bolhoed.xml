@@ -42,6 +42,7 @@
         <item name="backgroundSplit">@drawable/ab_bottom_solid_bolhoed</item>
         <item name="progressBarStyle">@style/ProgressBar.Bolhoed</item>
         <item name="titleTextStyle">@style/ActionBarTitleTextStyle.Bolhoed</item>
+        <item name="subtitleTextStyle">@style/ActionBarSubtitleTextStyle.Bolhoed</item>
     </style>
 
     <style name="ActionBar.Transparent.Bolhoed" parent="@style/Widget.Sherlock.Light.ActionBar">
@@ -58,6 +59,10 @@
     </style>
 
     <style name="ActionBarTitleTextStyle.Bolhoed" parent="@style/TextAppearance.Sherlock.Widget.ActionBar.Title">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+    
+    <style name="ActionBarSubtitleTextStyle.Bolhoed" parent="@style/TextAppearance.Sherlock.Widget.ActionBar.Subtitle">
         <item name="android:textColor">@android:color/white</item>
     </style>
 

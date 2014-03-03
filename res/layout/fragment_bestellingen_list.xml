@@ -4,14 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity" >
+    tools:context=".BestellijstFragment" >
 
     <ListView
         android:id="@+id/android:list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:dividerHeight="1dp"
-        tools:listitem="@layout/list_item_tafel" />
+        tools:listitem="@layout/list_item_bestelling" />
 
     <TextView
         android:id="@+id/android:empty"
@@ -19,6 +19,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="5dp"
-        android:text="@string/list_tafels_empty" />
+        android:text="@string/list_bestelling_empty" />
 
 </LinearLayout>

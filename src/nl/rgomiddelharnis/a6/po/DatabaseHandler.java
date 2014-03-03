@@ -507,6 +507,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     /**
      * Haalt alle producten op uit een bepaalde categorie uit de database.
      * 
+     * @param {@link Integer} Het nummer van de categorie
      * @return
      */
     public ArrayList<Map<String, Object>> getProducten(int categorienr) {
@@ -550,6 +551,63 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         return producten;
 
+    }
+
+    /**
+     * Haalt de prijs van een product op.
+     * 
+     * @param {@link Integer} Het nummer van het product.
+     * @param {@link Integer} Het aantal producten.
+     * @return {@link String} De prijs van het product.
+     */
+    public String getProductPrijs(int productnr, int aantal) {
+
+        // Haal valuta op
+        NumberFormat numberFormat = Functions.getNumberFormat(mContext);
+
+        // Voer query uit
+        String query = "SELECT " + KEY_PRIJS + " FROM " + TABLE_PRODUCTEN + " WHERE "
+                + KEY_PRODUCTNR + "=?";
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, new String[] {
+                Integer.toString(productnr)
+        });
+
+        // Haal gegevens op
+        cursor.moveToFirst();
+        double prijs = cursor.getDouble(cursor.getColumnIndexOrThrow(KEY_PRIJS));
+        prijs *= aantal;
+
+        cursor.close();
+        db.close();
+
+        return numberFormat.format(prijs);
+    }
+
+    /**
+     * Haalt de naam van een product op.
+     * 
+     * @param {@link Integer} Het nummer van het product.
+     * @return {@link String} De naam van het product.
+     */
+    public String getProductNaam(int productnr) {
+
+        // Voer query uit
+        String query = "SELECT " + KEY_GERECHT + " FROM " + TABLE_PRODUCTEN + " WHERE "
+                + KEY_PRODUCTNR + "=?";
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, new String[] {
+                Integer.toString(productnr)
+        });
+
+        // Haal gegevens op
+        cursor.moveToFirst();
+        String naam = cursor.getString(cursor.getColumnIndexOrThrow(KEY_GERECHT));
+
+        cursor.close();
+        db.close();
+
+        return naam;
     }
 
     /**
@@ -636,25 +694,28 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         // Haal gegevens op
         while (cursor.moveToNext()) {
-            if (cursor.getInt(cursor.getColumnIndexOrThrow(KEY_ACTIEF)) == 1) {
-                Map<String, Object> bestelling = new HashMap<String, Object>();
-                bestelling.put(KEY_BESTELNR,
-                        cursor.getInt(cursor.getColumnIndexOrThrow(KEY_BESTELNR)));
-                bestelling.put(KEY_TAFELNR,
-                        cursor.getInt(cursor.getColumnIndexOrThrow(KEY_TAFELNR)));
-                bestelling.put(KEY_ID, cursor.getInt(cursor.getColumnIndexOrThrow(KEY_ID)));
-                bestelling.put(KEY_PRODUCTNR,
-                        cursor.getInt(cursor.getColumnIndexOrThrow(KEY_PRODUCTNR)));
-                bestelling.put(KEY_AANTAL,
-                        cursor.getInt(cursor.getColumnIndexOrThrow(KEY_AANTAL)));
-                bestelling.put(KEY_OPMERKING,
-                        cursor.getString(cursor.getColumnIndexOrThrow(KEY_OPMERKING)));
-                bestelling.put(KEY_DATUM,
-                        cursor.getString(cursor.getColumnIndexOrThrow(KEY_DATUM)));
-                bestelling.put(KEY_STATUS,
-                        cursor.getInt(cursor.getColumnIndexOrThrow(KEY_STATUS)));
-                bestellingen.add(bestelling);
-            }
+            Map<String, Object> bestelling = new HashMap<String, Object>();
+            int productnr = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_PRODUCTNR));
+            bestelling.put(KEY_BESTELNR,
+                    cursor.getInt(cursor.getColumnIndexOrThrow(KEY_BESTELNR)));
+            bestelling.put(KEY_TAFELNR,
+                    cursor.getInt(cursor.getColumnIndexOrThrow(KEY_TAFELNR)));
+            bestelling.put(KEY_ID, cursor.getInt(cursor.getColumnIndexOrThrow(KEY_ID)));
+            bestelling.put(KEY_PRODUCTNR, productnr);
+            bestelling.put(KEY_AANTAL,
+                    cursor.getInt(cursor.getColumnIndexOrThrow(KEY_AANTAL)));
+            bestelling.put(KEY_OPMERKING,
+                    cursor.getString(cursor.getColumnIndexOrThrow(KEY_OPMERKING)));
+            bestelling.put(KEY_DATUM,
+                    cursor.getString(cursor.getColumnIndexOrThrow(KEY_DATUM)));
+            bestelling.put(KEY_STATUS,
+                    cursor.getInt(cursor.getColumnIndexOrThrow(KEY_STATUS)));
+            bestelling.put(
+                    KEY_PRIJS_FORMATTED,
+                    getProductPrijs(productnr,
+                            cursor.getInt(cursor.getColumnIndexOrThrow(KEY_AANTAL))));
+            bestelling.put(KEY_GERECHT, getProductNaam(productnr));
+            bestellingen.add(bestelling);
         }
 
         cursor.close();
@@ -662,5 +723,50 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         return bestellingen;
 
+    }
+
+    /**
+     * Haalt de totale prijs van een openstaande bestelling op van een tafel.
+     * 
+     * @param tafelnr {@link Integer} Het nummer van de tafel.
+     * @return {@link Double} De prijs van de bestelling.
+     */
+    public double getBestellingPrijs(int tafelnr) {
+
+        // Voer query uit
+        String query = "SELECT COALESCE(SUM(B." + KEY_AANTAL + " * P." + KEY_PRIJS + " ), 0) FROM "
+                + TABLE_BESTELLINGEN + " B, " + TABLE_PRODUCTEN + " P WHERE "
+                + KEY_TAFELNR + "=? AND B." + KEY_PRODUCTNR + "= P." + KEY_PRODUCTNR;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, new String[] {
+                Integer.toString(tafelnr)
+        });
+
+        // Haal gegevens op
+        cursor.moveToFirst();
+        double prijs = cursor.getDouble(0);
+
+        cursor.close();
+        db.close();
+
+        return prijs;
+    }
+
+    /**
+     * Haalt de totale prijs van een openstaande bestelling op van een tafel als
+     * opgemaakte String.
+     * 
+     * @param tafelnr {@link Integer} Het nummer van de tafel.
+     * @return {@link String} De prijs van de bestelling als String met valuta.
+     */
+    public String getBestellingPrijsFormatted(int tafelnr) {
+
+        // Haal valuta op
+        NumberFormat numberFormat = Functions.getNumberFormat(mContext);
+
+        // Haal prijs op
+        double prijs = getBestellingPrijs(tafelnr);
+
+        return numberFormat.format(prijs);
     }
 }

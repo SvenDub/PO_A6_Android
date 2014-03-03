@@ -42,6 +42,7 @@
         <item name="android:backgroundSplit">@drawable/ab_bottom_solid_bolhoed</item>
         <item name="android:progressBarStyle">@style/ProgressBar.Bolhoed</item>
         <item name="android:titleTextStyle">@style/ActionBarTitleTextStyle.Bolhoed</item>
+        <item name="android:subtitleTextStyle">@style/ActionBarSubtitleTextStyle.Bolhoed</item>
     </style>
 
     <style name="ActionBar.Transparent.Bolhoed" parent="@style/Widget.Sherlock.Light.ActionBar">

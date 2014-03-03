@@ -12,12 +12,6 @@ import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.ActionBar.TabListener;
 import com.actionbarsherlock.view.Menu;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import nl.rgomiddelharnis.a6.po.DatabaseHandler;
 import nl.rgomiddelharnis.a6.po.R;
 import nl.rgomiddelharnis.a6.po.adapter.BeheerTafelPagerAdapter;
@@ -27,7 +21,12 @@ import nl.rgomiddelharnis.a6.po.fragment.HoofdgerechtFragment;
 import nl.rgomiddelharnis.a6.po.fragment.NagerechtFragment;
 import nl.rgomiddelharnis.a6.po.fragment.VoorgerechtFragment;
 import nl.rgomiddelharnis.a6.po.task.BestellingenTask;
-import nl.rgomiddelharnis.a6.po.task.ProductenTask;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Beheert de tafels.
@@ -48,9 +47,9 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
     private static final String TAG = "BeheerTafelActivity";
 
     ActionBar mActionBar;
-    
+
     int mTafel;
-    
+
     // Pager
     BeheerTafelPagerAdapter mPagerAdapter;
     ViewPager mViewPager;
@@ -98,11 +97,11 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
 
         // Haal het meegegeven tafelnummer op
         mTafel = getIntent().getIntExtra(DatabaseHandler.KEY_TAFELNR, -1);
-        
+
         if (mTafel != -1) {
-        
+
             // Er is een tafelnummer meegegeven
-            
+
             mActionBar = getSupportActionBar();
             mFragmentManager = getSupportFragmentManager();
 
@@ -111,7 +110,7 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
 
             // Maak de PagerAdapter aan
             mPagerAdapter = new BeheerTafelPagerAdapter(mFragmentManager, mTafel);
-            
+
             // Haal bestellingen op
             DatabaseHandler mDb = new DatabaseHandler(getApplicationContext());
             // Bereid de verbindingsparameters voor
@@ -119,9 +118,9 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
             params.add(new BasicNameValuePair("tag", "bestellingen"));
             params.add(new BasicNameValuePair("gebruikersnaam", mDb.getGebruikersnaam()));
             params.add(new BasicNameValuePair("wachtwoord", mDb.getWachtwoord()));
-            
+
             new BestellingenTask(this).execute(params);
-            
+
             // Stel de adapter in
             mViewPager = (ViewPager) findViewById(R.id.pager);
             mViewPager.setAdapter(mPagerAdapter);
@@ -153,18 +152,19 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
             mActionBar.addTab(mTabNagerecht, TAB_NAGERECHT_POS);
             mActionBar.addTab(mTabDrank, TAB_DRANK_POS);
             mActionBar.addTab(mTabBestellijst, TAB_BESTELLIJST_POS);
-            
+
             // Stel de titel in
             mActionBar.setTitle(getString(R.string.tafel) + " " + mTafel);
-            
+            mActionBar.setSubtitle(mDb.getBestellingPrijsFormatted(mTafel));
         } else {
-            
+
             // Geen tafelnummer meegegeven
-            
+
             // Stel de gebruiker op de hoogte
-            Toast toast = Toast.makeText(getApplicationContext(), R.string.geen_tafel_geselecteerd, Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(getApplicationContext(), R.string.geen_tafel_geselecteerd,
+                    Toast.LENGTH_SHORT);
             toast.show();
-            
+
         }
     }
 
@@ -196,7 +196,7 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
         // TODO Auto-generated method stub
 
     }
-    
+
     /**
      * Haalt de PagerAdapter op.
      * 
@@ -204,6 +204,13 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
      */
     public BeheerTafelPagerAdapter getPagerAdapter() {
         return mPagerAdapter;
+    }
+
+    /**
+     * @return {@link Integer} Het nummer van de geselecteerde tafel.
+     */
+    public int getTafel() {
+        return mTafel;
     }
 
 }
