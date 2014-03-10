@@ -45,8 +45,10 @@
     <string name="geen_tafel_geselecteerd">No table selected</string>
     <string name="list_gerecht_empty">No products found</string>
     <string name="list_bestelling_empty">No orders placed</string>
-    <string name="activeer">Activate</string>
-    <string name="afrekenen">Pay</string>
+    <string-array name="action_beheer_items">
+        <item>Activate</item>
+        <item>Pay</item>
+    </string-array>
     
     <!-- SettingsActivity -->
     <string name="pref_header_general">General</string>

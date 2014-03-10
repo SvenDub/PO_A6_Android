@@ -1,6 +1,8 @@
 
 package nl.rgomiddelharnis.a6.po.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -11,6 +13,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.ActionBar.TabListener;
 import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 
 import nl.rgomiddelharnis.a6.po.DatabaseHandler;
 import nl.rgomiddelharnis.a6.po.R;
@@ -175,6 +178,46 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
     public boolean onCreateOptionsMenu(Menu menu) {
         getSupportMenuInflater().inflate(R.menu.beheer_tafel, menu);
         return true;
+    }
+    
+    /**
+     * Verwerkt het gedrag van de knoppen in het menu.
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_beheer: // Beheer tafel
+                
+                // Maak een dialog builder aan
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                
+                // Stel het dialog in
+                builder.setTitle(getString(R.string.tafel) + " " + Integer.toString(mTafel))
+                .setItems(R.array.action_beheer_items, new DialogInterface.OnClickListener() {
+                    
+                    /**
+                     * Voert een actie uit afhankelijk van de gekozen optie.
+                     */
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0: // Activeer
+                                break;
+                            case 1: // Betalen
+                                break;
+                        }
+                        
+                    }
+                });
+                
+                // Maak dialog aan
+                AlertDialog dialog = builder.create();
+                
+                // Laat dialog zien
+                dialog.show();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**

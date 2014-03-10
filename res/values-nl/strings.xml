@@ -45,8 +45,10 @@
     <string name="geen_tafel_geselecteerd">Geen tafel geselecteerd</string>
     <string name="list_gerecht_empty">Geen gerechten gevonden</string>
     <string name="list_bestelling_empty">Geen bestellingen geplaatst</string>
-    <string name="activeer">Activeer</string>
-    <string name="afrekenen">Afrekenen</string>
+    <string-array name="action_beheer_items">
+        <item>Activeren</item>
+        <item>Betalen</item>
+    </string-array>
     
     <!-- SettingsActivity -->
     <string name="pref_header_general">Algemeen</string>

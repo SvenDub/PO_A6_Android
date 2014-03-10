@@ -45,7 +45,7 @@ public class VoorgerechtFragment extends SherlockListFragment {
         
         mDb = new DatabaseHandler(getSherlockActivity());
         
-     // Verkrijg data van database
+        // Verkrijg data van database
         ArrayList<Map<String, Object>> data = mDb.getProducten(2);
 
         // Gegevens om te gebruiken...
