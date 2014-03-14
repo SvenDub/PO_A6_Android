@@ -21,7 +21,6 @@
     <string name="title_activity_settings">Settings</string>
 
     <!-- MainActivity -->
-    <string name="kies_tafel">Choose a table:</string>
     <string name="logout_success">Log out successful</string>
     <string name="logout_fail">Log out failed</string>
 
@@ -45,9 +44,12 @@
     <string name="geen_tafel_geselecteerd">No table selected</string>
     <string name="list_gerecht_empty">No products found</string>
     <string name="list_bestelling_empty">No orders placed</string>
-    <string-array name="action_beheer_items">
+    <string-array name="action_beheer_items_vrij">
         <item>Activate</item>
+    </string-array>
+    <string-array name="action_beheer_items_bezet">
         <item>Pay</item>
+        <item>Edit</item>
     </string-array>
     <string name="aantal_klanten">Amount of customers</string>
     

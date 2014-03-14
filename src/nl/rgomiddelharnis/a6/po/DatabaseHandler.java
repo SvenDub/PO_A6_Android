@@ -369,7 +369,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     /**
      * Haalt alle tafels op uit de database. De status wordt weergegeven als
-     * localized string.
+     * icon.
      * 
      * @return
      */
@@ -401,6 +401,33 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     }
 
+    /**
+     * Haalt de status van een tafel op.
+     * 
+     * @param tafelnummer {@link Integer} Het numer van de tafel.
+     * @return boolean De status van de tafel.
+     */
+    public boolean isTafelBezet(int tafelnummer) {
+        boolean result = false;
+        
+        // Voer query uit
+        String query = "SELECT " + KEY_STATUS + " FROM " + TABLE_TAFEL + " WHERE " + KEY_TAFELNR + "=?";
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, new String[] { Integer.toString(tafelnummer)});
+        
+        // Haal gegevens op
+        cursor.moveToFirst();
+        int status = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_STATUS));
+        
+        result = (status == 1) ? true : false;
+        
+        cursor.close();
+        db.close();
+        
+        return result;
+        
+    }
+    
     /**
      * Voegt een nieuw product toe.
      * 

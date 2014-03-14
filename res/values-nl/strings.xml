@@ -21,7 +21,6 @@
     <string name="title_activity_settings">Settings</string>
 
     <!-- MainActivity -->
-    <string name="kies_tafel">Kies een tafel:</string>
     <string name="logout_success">Uitloggen succesvol</string>
     <string name="logout_fail">Uitloggen mislukt</string>
 
@@ -45,9 +44,12 @@
     <string name="geen_tafel_geselecteerd">Geen tafel geselecteerd</string>
     <string name="list_gerecht_empty">Geen gerechten gevonden</string>
     <string name="list_bestelling_empty">Geen bestellingen geplaatst</string>
-    <string-array name="action_beheer_items">
+    <string-array name="action_beheer_items_vrij">
         <item>Activeren</item>
+    </string-array>
+    <string-array name="action_beheer_items_bezet">
         <item>Betalen</item>
+        <item>Aanpassen</item>
     </string-array>
     <string name="aantal_klanten">Aantal klanten</string>
     

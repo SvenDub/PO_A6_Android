@@ -205,25 +205,44 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
                 // Stel het dialog in
-                builder.setTitle(getString(R.string.tafel) + " " + Integer.toString(mTafel))
-                        .setItems(R.array.action_beheer_items,
-                                new DialogInterface.OnClickListener() {
+                builder.setTitle(getString(R.string.tafel) + " " + Integer.toString(mTafel));
+                
+                if (mDb.isTafelBezet(mTafel)) {
+                    builder.setItems(R.array.action_beheer_items_bezet,
+                            new DialogInterface.OnClickListener() {
 
-                                    /**
-                                     * Voert een actie uit afhankelijk van de
-                                     * gekozen optie.
-                                     */
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        switch (which) {
-                                            case 0: // Activeer
-                                                activeerDialog();
-                                                break;
-                                            case 1: // Betalen
-                                                break;
-                                        }
+                                /**
+                                 * Voert een actie uit afhankelijk van de gekozen
+                                 * optie.
+                                 */
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    switch (which) {
+                                        case 0: // TODO: Betalen
+                                            break;
+                                        case 1: // TODO: Aanpassen
+                                            break;
                                     }
-                                });
+                                }
+                            });
+                } else {
+                builder.setItems(R.array.action_beheer_items_vrij,
+                        new DialogInterface.OnClickListener() {
+
+                            /**
+                             * Voert een actie uit afhankelijk van de gekozen
+                             * optie.
+                             */
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which) {
+                                    case 0: // Activeer
+                                        activeerDialog();
+                                        break;
+                                }
+                            }
+                        });
+                }
 
                 // Maak dialog aan
                 AlertDialog dialog = builder.create();
