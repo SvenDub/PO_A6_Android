@@ -2,11 +2,19 @@
 package nl.rgomiddelharnis.a6.po.activity;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -23,6 +31,7 @@ import nl.rgomiddelharnis.a6.po.fragment.DrankFragment;
 import nl.rgomiddelharnis.a6.po.fragment.HoofdgerechtFragment;
 import nl.rgomiddelharnis.a6.po.fragment.NagerechtFragment;
 import nl.rgomiddelharnis.a6.po.fragment.VoorgerechtFragment;
+import nl.rgomiddelharnis.a6.po.task.ActiveerTafelTask;
 import nl.rgomiddelharnis.a6.po.task.BestellingenTask;
 
 import org.apache.http.NameValuePair;
@@ -50,6 +59,8 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
     private static final String TAG = "BeheerTafelActivity";
 
     ActionBar mActionBar;
+    Context mContext;
+    DatabaseHandler mDb;
 
     int mTafel;
 
@@ -106,6 +117,8 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
             // Er is een tafelnummer meegegeven
 
             mActionBar = getSupportActionBar();
+            mContext = this;
+            mDb = new DatabaseHandler(getApplicationContext());
             mFragmentManager = getSupportFragmentManager();
 
             // Stel de layout in
@@ -179,7 +192,7 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
         getSupportMenuInflater().inflate(R.menu.beheer_tafel, menu);
         return true;
     }
-    
+
     /**
      * Verwerkt het gedrag van de knoppen in het menu.
      */
@@ -187,37 +200,108 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_beheer: // Beheer tafel
-                
+
                 // Maak een dialog builder aan
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                
+
                 // Stel het dialog in
                 builder.setTitle(getString(R.string.tafel) + " " + Integer.toString(mTafel))
-                .setItems(R.array.action_beheer_items, new DialogInterface.OnClickListener() {
-                    
-                    /**
-                     * Voert een actie uit afhankelijk van de gekozen optie.
-                     */
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0: // Activeer
-                                break;
-                            case 1: // Betalen
-                                break;
-                        }
-                        
-                    }
-                });
-                
+                        .setItems(R.array.action_beheer_items,
+                                new DialogInterface.OnClickListener() {
+
+                                    /**
+                                     * Voert een actie uit afhankelijk van de
+                                     * gekozen optie.
+                                     */
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        switch (which) {
+                                            case 0: // Activeer
+                                                activeerDialog();
+                                                break;
+                                            case 1: // Betalen
+                                                break;
+                                        }
+                                    }
+                                });
+
                 // Maak dialog aan
                 AlertDialog dialog = builder.create();
-                
+
                 // Laat dialog zien
                 dialog.show();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Laat een Dialog zien om een tafel te activeren.
+     */
+    private void activeerDialog() {
+        // Maak een dialog aan
+        final Dialog dialogActiveer = new Dialog(mContext);
+
+        // Stel het dialog in
+        dialogActiveer.setContentView(R.layout.dialog_activeer_tafel);
+        dialogActiveer.setTitle(getString(R.string.tafel) + " " + Integer.toString(mTafel));
+
+        // Maak seekbar aan
+        final SeekBar dialogSeekBar = (SeekBar) dialogActiveer.findViewById(R.id.skb_aantal);
+        dialogSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+
+            }
+
+            /**
+             * Verandert bijbehordend label als de SeekBar verandert.
+             */
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                ((TextView) dialogActiveer.findViewById(R.id.lbl_aantal)).setText(Integer
+                        .toString(progress + 1));
+            }
+        });
+
+        // Maak button aan
+        Button dialogButton = (Button) dialogActiveer.findViewById(R.id.btn_ok);
+        dialogButton.setOnClickListener(new OnClickListener() {
+
+            /**
+             * Maakt een <code>ActiveerTafelTask</code> aan om een tafel te
+             * activeren.
+             */
+            @SuppressWarnings("unchecked")
+            @Override
+            public void onClick(View v) {
+
+                // Bereid de verbindingsparameters voor
+                List<NameValuePair> params = new ArrayList<NameValuePair>(3);
+                params.add(new BasicNameValuePair("tag", "activeer_tafel"));
+                params.add(new BasicNameValuePair("gebruikersnaam", mDb.getGebruikersnaam()));
+                params.add(new BasicNameValuePair("wachtwoord", mDb.getWachtwoord()));
+                params.add(new BasicNameValuePair("tafelnummer", Integer.toString(mTafel)));
+                params.add(new BasicNameValuePair("aantal_klanten", Integer.toString(dialogSeekBar
+                        .getProgress() + 1)));
+
+                new ActiveerTafelTask(mContext).execute(params);
+
+                // Sluit dialog
+                dialogActiveer.dismiss();
+            }
+        });
+
+        // Laat dialog zien
+        dialogActiveer.show();
     }
 
     /**
