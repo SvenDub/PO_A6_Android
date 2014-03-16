@@ -46,6 +46,7 @@ public class MainActivity extends ProgressFragmentActivity {
      * 
      * @see android.util.Log
      */
+    @SuppressWarnings("unused")
     private static final String TAG = "MainActivity";
 
     ActionBar mActionBar;

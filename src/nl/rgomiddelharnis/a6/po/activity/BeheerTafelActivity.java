@@ -55,6 +55,7 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
      * 
      * @see android.util.Log
      */
+    @SuppressWarnings("unused")
     private static final String TAG = "BeheerTafelActivity";
 
     ActionBar mActionBar;

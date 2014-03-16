@@ -33,6 +33,7 @@ public class LoginActivity extends ProgressFragmentActivity {
      * 
      * @see android.util.Log
      */
+    @SuppressWarnings("unused")
     private static final String TAG = "LoginAcivity";
 
     ActionBar mActionBar;

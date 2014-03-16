@@ -30,6 +30,7 @@ public class TafelsFragment extends SherlockListFragment {
      * 
      * @see android.util.Log
      */
+    @SuppressWarnings("unused")
     private static final String TAG = "TafelsFragment";
 
     DatabaseHandler mDb;

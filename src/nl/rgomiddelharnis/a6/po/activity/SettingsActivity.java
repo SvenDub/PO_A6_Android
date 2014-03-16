@@ -70,6 +70,7 @@ public class SettingsActivity extends PreferenceActivity {
     /**
      * Laat een enkele kolom zien als dit nodig is.
      */
+    @SuppressWarnings("deprecation")
     private void setupSimplePreferencesScreen() {
         if (!isSimplePreferences(this)) {
             return;
@@ -91,6 +92,7 @@ public class SettingsActivity extends PreferenceActivity {
     /**
      * Controleert of er sprake is van een XL-scherm.
      */
+    @TargetApi(Build.VERSION_CODES.GINGERBREAD)
     private static boolean isXLargeTablet(Context context) {
         return (context.getResources().getConfiguration().screenLayout
         & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_XLARGE;

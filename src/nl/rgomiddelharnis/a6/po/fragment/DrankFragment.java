@@ -28,6 +28,7 @@ public class DrankFragment extends SherlockListFragment {
      * 
      * @see android.util.Log
      */
+    @SuppressWarnings("unused")
     private static final String TAG = "DrankFragment";
 
     DatabaseHandler mDb;

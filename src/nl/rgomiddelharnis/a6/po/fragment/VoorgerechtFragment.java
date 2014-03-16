@@ -28,6 +28,7 @@ public class VoorgerechtFragment extends SherlockListFragment {
      * 
      * @see android.util.Log
      */
+    @SuppressWarnings("unused")
     private static final String TAG = "VoorgerechtFragment";
 
     DatabaseHandler mDb;

@@ -28,6 +28,7 @@ public class BestellijstFragment extends SherlockListFragment {
      * 
      * @see android.util.Log
      */
+    @SuppressWarnings("unused")
     private static final String TAG = "BestellijstFragment";
 
     DatabaseHandler mDb;
