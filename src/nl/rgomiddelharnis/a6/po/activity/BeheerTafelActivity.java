@@ -206,19 +206,20 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
 
                 // Stel het dialog in
                 builder.setTitle(getString(R.string.tafel) + " " + Integer.toString(mTafel));
-                
+
                 if (mDb.isTafelBezet(mTafel)) {
                     builder.setItems(R.array.action_beheer_items_bezet,
                             new DialogInterface.OnClickListener() {
 
                                 /**
-                                 * Voert een actie uit afhankelijk van de gekozen
-                                 * optie.
+                                 * Voert een actie uit afhankelijk van de
+                                 * gekozen optie.
                                  */
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     switch (which) {
                                         case 0: // TODO: Betalen
+                                            betaal();
                                             break;
                                         case 1: // TODO: Aanpassen
                                             break;
@@ -226,22 +227,22 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
                                 }
                             });
                 } else {
-                builder.setItems(R.array.action_beheer_items_vrij,
-                        new DialogInterface.OnClickListener() {
+                    builder.setItems(R.array.action_beheer_items_vrij,
+                            new DialogInterface.OnClickListener() {
 
-                            /**
-                             * Voert een actie uit afhankelijk van de gekozen
-                             * optie.
-                             */
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                switch (which) {
-                                    case 0: // Activeer
-                                        activeerDialog();
-                                        break;
+                                /**
+                                 * Voert een actie uit afhankelijk van de
+                                 * gekozen optie.
+                                 */
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    switch (which) {
+                                        case 0: // Activeer
+                                            activeerDialog();
+                                            break;
+                                    }
                                 }
-                            }
-                        });
+                            });
                 }
 
                 // Maak dialog aan
@@ -255,7 +256,54 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
     }
 
     /**
-     * Laat een Dialog zien om een tafel te activeren.
+     * Laat een {@link Dialog} zien om een tafel af te sluiten.
+     */
+    private void betaal() {
+        // Maak een builder aan
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+
+        // Stel het dialog in
+        builder.setTitle(getString(R.string.tafel) + " " + Integer.toString(mTafel));
+        builder.setMessage(R.string.action_beheer_betalen_bevestig);
+        builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+            /**
+             * Maakt een <code>ActiveerTafelTask</code> aan om de tafel af te
+             * sluiten.
+             */
+            @SuppressWarnings("unchecked")
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Bereid de verbindingsparameters voor
+                List<NameValuePair> params = new ArrayList<NameValuePair>(4);
+                params.add(new BasicNameValuePair("tag", "betaal_tafel"));
+                params.add(new BasicNameValuePair("gebruikersnaam", mDb.getGebruikersnaam()));
+                params.add(new BasicNameValuePair("wachtwoord", mDb.getWachtwoord()));
+                params.add(new BasicNameValuePair("tafelnummer", Integer.toString(mTafel)));
+
+                new ActiveerTafelTask(mContext).execute(params);
+
+                // Sluit BeheerTafelActivity
+                finish();
+            }
+        });
+        builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+
+            /**
+             * Annuleert het dialog.
+             */
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        // Laat het dialog zien
+        builder.show();
+    }
+
+    /**
+     * Laat een {@link Dialog} zien om een tafel te activeren.
      */
     private void activeerDialog() {
         // Maak een dialog aan
@@ -296,7 +344,7 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
         dialogButton.setOnClickListener(new OnClickListener() {
 
             /**
-             * Maakt een <code>ActiveerTafelTask</code> aan om een tafel te
+             * Maakt een <code>ActiveerTafelTask</code> aan om de tafel te
              * activeren.
              */
             @SuppressWarnings("unchecked")
@@ -304,7 +352,7 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
             public void onClick(View v) {
 
                 // Bereid de verbindingsparameters voor
-                List<NameValuePair> params = new ArrayList<NameValuePair>(3);
+                List<NameValuePair> params = new ArrayList<NameValuePair>(5);
                 params.add(new BasicNameValuePair("tag", "activeer_tafel"));
                 params.add(new BasicNameValuePair("gebruikersnaam", mDb.getGebruikersnaam()));
                 params.add(new BasicNameValuePair("wachtwoord", mDb.getWachtwoord()));

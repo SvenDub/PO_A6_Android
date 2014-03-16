@@ -51,7 +51,8 @@
         <item>Betalen</item>
         <item>Aanpassen</item>
     </string-array>
-    <string name="aantal_klanten">Aantal klanten</string>
+    <string name="action_beheer_aantal_klanten">Aantal klanten</string>
+    <string name="action_beheer_betalen_bevestig">Weet je zeker dat je wilt betalen?</string>
     
     <!-- SettingsActivity -->
     <string name="pref_header_general">Algemeen</string>

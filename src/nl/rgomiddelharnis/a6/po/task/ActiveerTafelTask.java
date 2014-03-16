@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Deze class gebruikt een achtergrond thread om tafels te activeren.
+ * Deze class gebruikt een achtergrond thread om tafels te activeren of af te sluiten.
  * 
  * @author Sven Dubbeld <sven.dubbeld1@gmail.com>
  * @see AsyncTask
@@ -57,7 +57,7 @@ public class ActiveerTafelTask extends AsyncTask<List<NameValuePair>, Void, JSON
 
     /**
      * Start een nieuwe <code>ActiveerTafelTask</code> om een tafel te
-     * activeren.
+     * activeren of af te sluiten.
      * 
      * @param context {@link Context} De Activity die de Task start.
      */
