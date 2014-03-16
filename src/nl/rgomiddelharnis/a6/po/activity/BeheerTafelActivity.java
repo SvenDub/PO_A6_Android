@@ -9,9 +9,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -219,7 +218,7 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
                                 public void onClick(DialogInterface dialog, int which) {
                                     switch (which) {
                                         case 0: // TODO: Betalen
-                                            betaal();
+                                            betaalDialog();
                                             break;
                                         case 1: // TODO: Aanpassen
                                             break;
@@ -258,7 +257,7 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
     /**
      * Laat een {@link Dialog} zien om een tafel af te sluiten.
      */
-    private void betaal() {
+    private void betaalDialog() {
         // Maak een builder aan
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
 
@@ -306,16 +305,20 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
      * Laat een {@link Dialog} zien om een tafel te activeren.
      */
     private void activeerDialog() {
-        // Maak een dialog aan
-        final Dialog dialogActiveer = new Dialog(mContext);
+        // Maak een builder aan
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+
+        // Maak layout aan
+        LayoutInflater inflater = getLayoutInflater();
+        final View layout = inflater.inflate(R.layout.dialog_activeer_tafel, null);
 
         // Stel het dialog in
-        dialogActiveer.setContentView(R.layout.dialog_activeer_tafel);
-        dialogActiveer.setTitle(getString(R.string.tafel) + " " + Integer.toString(mTafel));
+        builder.setTitle(R.string.action_beheer_aantal_klanten);
+        builder.setView(layout);
 
         // Maak seekbar aan
-        final SeekBar dialogSeekBar = (SeekBar) dialogActiveer.findViewById(R.id.skb_aantal);
-        dialogSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+        final SeekBar seekBar = (SeekBar) layout.findViewById(R.id.skb_aantal);
+        seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
@@ -334,14 +337,13 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
              */
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                ((TextView) dialogActiveer.findViewById(R.id.lbl_aantal)).setText(Integer
+                ((TextView) layout.findViewById(R.id.lbl_aantal)).setText(Integer
                         .toString(progress + 1));
             }
         });
 
         // Maak button aan
-        Button dialogButton = (Button) dialogActiveer.findViewById(R.id.btn_ok);
-        dialogButton.setOnClickListener(new OnClickListener() {
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 
             /**
              * Maakt een <code>ActiveerTafelTask</code> aan om de tafel te
@@ -349,7 +351,7 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
              */
             @SuppressWarnings("unchecked")
             @Override
-            public void onClick(View v) {
+            public void onClick(DialogInterface dialog, int which) {
 
                 // Bereid de verbindingsparameters voor
                 List<NameValuePair> params = new ArrayList<NameValuePair>(5);
@@ -357,18 +359,18 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
                 params.add(new BasicNameValuePair("gebruikersnaam", mDb.getGebruikersnaam()));
                 params.add(new BasicNameValuePair("wachtwoord", mDb.getWachtwoord()));
                 params.add(new BasicNameValuePair("tafelnummer", Integer.toString(mTafel)));
-                params.add(new BasicNameValuePair("aantal_klanten", Integer.toString(dialogSeekBar
+                params.add(new BasicNameValuePair("aantal_klanten", Integer.toString(seekBar
                         .getProgress() + 1)));
 
                 new ActiveerTafelTask(mContext).execute(params);
 
                 // Sluit dialog
-                dialogActiveer.dismiss();
+                dialog.dismiss();
             }
         });
 
         // Laat dialog zien
-        dialogActiveer.show();
+        builder.show();
     }
 
     /**
