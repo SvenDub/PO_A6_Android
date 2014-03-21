@@ -2,6 +2,7 @@
 package nl.rgomiddelharnis.a6.po.fragment;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -100,6 +101,11 @@ public class DrankFragment extends SherlockListFragment {
         bestelDialog(selected);
     }
 
+    /**
+     * Laat een {@link Dialog} zien om een bestelling toe te voegen.
+     * 
+     * @param selected {@link Map}<{@link String}, {@link Object}> Het gekozen item.
+     */
     private void bestelDialog(final Map<String, Object> selected) {
         // Maak een builder aan
         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
