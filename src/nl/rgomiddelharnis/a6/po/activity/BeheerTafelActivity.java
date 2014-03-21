@@ -218,7 +218,7 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     switch (which) {
-                                        case 0: // TODO: Betalen
+                                        case 0: // Betalen
                                             betaalDialog();
                                             break;
                                         case 1: // TODO: Aanpassen

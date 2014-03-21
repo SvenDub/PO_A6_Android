@@ -53,6 +53,8 @@
     </string-array>
     <string name="action_beheer_aantal_klanten">Amount of customers</string>
     <string name="action_beheer_betalen_bevestig">Are you sure you want to pay?</string>
+    <string name="aantal">Amount</string>
+    <string name="opmerking">Comment</string>
     
     <!-- SettingsActivity -->
     <string name="pref_header_general">General</string>
