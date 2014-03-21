@@ -222,6 +222,7 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
                                             betaalDialog();
                                             break;
                                         case 1: // TODO: Aanpassen
+                                            aanpasDialog();
                                             break;
                                     }
                                 }
@@ -303,6 +304,88 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
     }
 
     /**
+     * Laat een {@link Dialog} zien om een tafel aan te passen.
+     */
+    private void aanpasDialog() {
+        // Maak een builder aan
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+
+        // Maak layout aan
+        LayoutInflater inflater = getLayoutInflater();
+        final View layout = inflater.inflate(R.layout.dialog_activeer_tafel, null);
+
+        // Stel het dialog in
+        builder.setTitle(R.string.action_beheer_aantal_klanten);
+        builder.setView(layout);
+
+        // Maak seekbar aan
+        final SeekBar seekBar = (SeekBar) layout.findViewById(R.id.skb_aantal);
+        seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                // TODO Auto-generated method stub
+
+            }
+
+            /**
+             * Verandert bijbehordend label als de SeekBar verandert.
+             */
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                ((TextView) layout.findViewById(R.id.lbl_aantal)).setText(Integer
+                        .toString(progress + 1));
+            }
+        });
+
+        // Maak buttons aan
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
+            /**
+             * Maakt een <code>ActiveerTafelTask</code> aan om de tafel aan te
+             * passen.
+             */
+            @SuppressWarnings("unchecked")
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                // Bereid de verbindingsparameters voor
+                List<NameValuePair> params = new ArrayList<NameValuePair>(5);
+                params.add(new BasicNameValuePair("tag", "pas_tafel_aan"));
+                params.add(new BasicNameValuePair("gebruikersnaam", mDb.getGebruikersnaam()));
+                params.add(new BasicNameValuePair("wachtwoord", mDb.getWachtwoord()));
+                params.add(new BasicNameValuePair("tafelnummer", Integer.toString(mTafel)));
+                params.add(new BasicNameValuePair("aantal_klanten", Integer.toString(seekBar
+                        .getProgress() + 1)));
+
+                new ActiveerTafelTask(mContext).execute(params);
+
+                // Sluit dialog
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+
+            /**
+             * Annuleert het dialog.
+             */
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        // Laat dialog zien
+        builder.show();
+    }
+
+    /**
      * Laat een {@link Dialog} zien om een tafel te activeren.
      */
     private void activeerDialog() {
@@ -343,7 +426,7 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
             }
         });
 
-        // Maak button aan
+        // Maak buttons aan
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 
             /**
@@ -367,6 +450,16 @@ public class BeheerTafelActivity extends ProgressFragmentActivity implements Tab
 
                 // Sluit dialog
                 dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+
+            /**
+             * Annuleert het dialog.
+             */
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
             }
         });
 
