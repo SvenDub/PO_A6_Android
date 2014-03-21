@@ -134,7 +134,7 @@ public class DrankFragment extends SherlockListFragment {
             public void onClick(DialogInterface dialog, int which) {
 
                 // Bereid de verbindingsparameters voor
-                List<NameValuePair> params = new ArrayList<NameValuePair>(5);
+                List<NameValuePair> params = new ArrayList<NameValuePair>(7);
                 params.add(new BasicNameValuePair("tag", "bestel"));
                 params.add(new BasicNameValuePair("gebruikersnaam", mDb.getGebruikersnaam()));
                 params.add(new BasicNameValuePair("wachtwoord", mDb.getWachtwoord()));
