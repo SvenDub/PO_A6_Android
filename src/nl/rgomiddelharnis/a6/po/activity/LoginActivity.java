@@ -12,6 +12,7 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
+import nl.rgomiddelharnis.a6.po.Functions;
 import nl.rgomiddelharnis.a6.po.R;
 import nl.rgomiddelharnis.a6.po.task.LoginTask;
 
@@ -45,22 +46,25 @@ public class LoginActivity extends ProgressFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mActionBar = getSupportActionBar();
+        if (Functions.checkPlayServices(this)) {
 
-        // Stel de layout in
-        setContentView(R.layout.activity_login);
+            mActionBar = getSupportActionBar();
 
-        // Sla de tekstvakken op in variabelen
-        mTxtServer = (EditText) findViewById(R.id.txt_server);
-        mTxtGebruiker = (EditText) findViewById(R.id.txt_gebruiker);
-        mTxtWachtwoord = (EditText) findViewById(R.id.txt_wachtwoord);
+            // Stel de layout in
+            setContentView(R.layout.activity_login);
 
-        // Pas het gedrag van de enter knop aan
-        mTxtServer.setOnEditorActionListener(getOnEditorActionListener());
-        mTxtGebruiker.setOnEditorActionListener(getOnEditorActionListener());
-        mTxtWachtwoord.setOnEditorActionListener(getOnEditorActionListener());
-        mTxtWachtwoord
-                .setImeActionLabel(getText(R.string.action_login), EditorInfo.IME_ACTION_DONE);
+            // Sla de tekstvakken op in variabelen
+            mTxtServer = (EditText) findViewById(R.id.txt_server);
+            mTxtGebruiker = (EditText) findViewById(R.id.txt_gebruiker);
+            mTxtWachtwoord = (EditText) findViewById(R.id.txt_wachtwoord);
+
+            // Pas het gedrag van de enter knop aan
+            mTxtServer.setOnEditorActionListener(getOnEditorActionListener());
+            mTxtGebruiker.setOnEditorActionListener(getOnEditorActionListener());
+            mTxtWachtwoord.setOnEditorActionListener(getOnEditorActionListener());
+            mTxtWachtwoord
+                    .setImeActionLabel(getText(R.string.action_login), EditorInfo.IME_ACTION_DONE);
+        }
 
     }
 

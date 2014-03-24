@@ -5,16 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import nl.rgomiddelharnis.a6.po.DatabaseHandler;
+import nl.rgomiddelharnis.a6.po.Functions;
 import nl.rgomiddelharnis.a6.po.R;
 import nl.rgomiddelharnis.a6.po.fragment.TafelsFragment;
 import nl.rgomiddelharnis.a6.po.task.TafelStatusTask;
@@ -45,16 +43,16 @@ public class MainActivity extends ProgressFragmentActivity {
      */
     public static final boolean LOCAL_LOGV = true;
     /**
+     * Google Developers project nummer.
+     */
+    public static final String SENDER_ID = "150943180444";
+    /**
      * Tag voor in logs.
      * 
      * @see android.util.Log
      */
+    @SuppressWarnings("unused")
     private static final String TAG = "MainActivity";
-
-    /**
-     * Return code voor Google Play Services.
-     */
-    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     ActionBar mActionBar;
     DatabaseHandler mDb;
@@ -77,7 +75,7 @@ public class MainActivity extends ProgressFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (checkPlayServices()) {
+        if (Functions.checkPlayServices(this)) {
 
             mActionBar = getSupportActionBar();
             mDb = new DatabaseHandler(getApplicationContext());
@@ -124,26 +122,7 @@ public class MainActivity extends ProgressFragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        checkPlayServices();
-    }
-
-    /**
-     * Controleert of de Google Play Services beschikbaar zijn. Laat een dialog
-     * zien als dit niet zo is.
-     */
-    private boolean checkPlayServices() {
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
-                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
-            } else {
-                Log.i(TAG, "Apparaat niet ondersteund.");
-                finish();
-            }
-            return false;
-        }
-        return true;
+        Functions.checkPlayServices(this);
     }
 
     /**

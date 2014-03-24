@@ -4,6 +4,12 @@ package nl.rgomiddelharnis.a6.po;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.preference.PreferenceManager;
+import android.util.Log;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+
+import nl.rgomiddelharnis.a6.po.activity.ProgressFragmentActivity;
 
 import java.text.NumberFormat;
 import java.util.Currency;
@@ -16,6 +22,11 @@ import java.util.Locale;
  */
 public class Functions {
 
+    /**
+     * Return code voor Google Play Services.
+     */
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    
     /**
      * Controleert of er een dataverbinding beschikbaar is.
      * 
@@ -77,6 +88,28 @@ public class Functions {
         numberFormat.setCurrency(currency);
 
         return numberFormat;
+    }
+    
+    /**
+     * Controleert of de Google Play Services beschikbaar zijn. Laat een dialog
+     * zien als dit niet zo is.
+     * 
+     * @param activity {@link ProgressFragmentActivity} De Activity die de check aanvraagt.
+     * @return {@link Boolean} True als de services beschikbaar zijn.
+     */
+    public static boolean checkPlayServices(ProgressFragmentActivity activity) {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(activity);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, activity,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Log.i("GooglePlayServices", "Apparaat niet ondersteund.");
+                activity.finish();
+            }
+            return false;
+        }
+        return true;
     }
 
 }

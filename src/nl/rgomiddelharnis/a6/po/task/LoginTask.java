@@ -7,6 +7,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+
 import nl.rgomiddelharnis.a6.po.DatabaseHandler;
 import nl.rgomiddelharnis.a6.po.R;
 import nl.rgomiddelharnis.a6.po.activity.MainActivity;
@@ -18,6 +20,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
@@ -25,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
@@ -49,6 +53,7 @@ public class LoginTask extends AsyncTask<List<NameValuePair>, Void, JSONObject> 
     String json = "";
     String error = null;
     String url = "";
+    String regid = "";
 
     Context mContext;
     ProgressFragmentActivity mActivity;
@@ -85,8 +90,20 @@ public class LoginTask extends AsyncTask<List<NameValuePair>, Void, JSONObject> 
     protected JSONObject doInBackground(List<NameValuePair>... params) {
         JSONObject jObj = null;
 
+        // Haal Google Cloud Messaging op
+        GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(mContext);
+        
+        // Registreer bij Google Cloud Messaging
+        try {
+            regid = gcm.register(MainActivity.SENDER_ID);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
         // Verkrijg parameters
         List<NameValuePair> param = params[0];
+        // Voeg gcm registratie toe
+        param.add(new BasicNameValuePair("registration_id", regid));
 
         try {
 
@@ -168,12 +185,12 @@ public class LoginTask extends AsyncTask<List<NameValuePair>, Void, JSONObject> 
 
                     // Haal 'user' object op
                     JSONObject json_user = result.getJSONObject("user");
-
+                    
                     // Log de gebruiker in
                     mDb.login(json_user.getInt(DatabaseHandler.KEY_ID),
                             json_user.getString(DatabaseHandler.KEY_GEBRUIKER),
                             json_user.getString(DatabaseHandler.KEY_WACHTWOORD),
-                            url);
+                            url, json_user.getString("regid"));
 
                     // Meld dat het inloggen gelukt is
                     Toast toast = Toast.makeText(mContext, R.string.login_success,

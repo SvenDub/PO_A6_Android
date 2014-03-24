@@ -63,6 +63,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      */
     public static final String KEY_SITE = "site";
     /**
+     * De key voor registratie id.
+     */
+    public static final String KEY_REG_ID = "registration_id";
+    /**
      * De key voor de status.
      */
     public static final String KEY_STATUS = "status";
@@ -140,7 +144,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // Query's
         String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_LOGIN + "(" + KEY_ID
                 + " INTEGER PRIMARY KEY, " + KEY_GEBRUIKER + " TEXT UNIQUE, " + KEY_WACHTWOORD
-                + " TEXT," + KEY_SITE + " TEXT" + ")";
+                + " TEXT," + KEY_SITE + " TEXT," + KEY_REG_ID + " TEXT" + ")";
         String CREATE_TAFEL_TABLE = "CREATE TABLE " + TABLE_TAFEL + "(" + KEY_TAFELNR
                 + " INTEGER PRIMARY KEY, " + KEY_STATUS + " INTEGER" + ")";
         String CREATE_PRODUCTEN_TABLE = "CREATE TABLE " + TABLE_PRODUCTEN + "(" + KEY_PRODUCTNR
@@ -202,7 +206,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      * @param site {@link String} De url van de site om te gebruiken.
      * @return {@link Boolean} True als er ingelogd is.
      */
-    public boolean login(int id, String gebruikersnaam, String wachtwoord, String site) {
+    public boolean login(int id, String gebruikersnaam, String wachtwoord, String site, String regid) {
 
         // Log de vorige gebruiker uit
         logout();
@@ -213,6 +217,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_GEBRUIKER, gebruikersnaam);
         values.put(KEY_WACHTWOORD, wachtwoord);
         values.put(KEY_SITE, site);
+        values.put(KEY_REG_ID, regid);
 
         // Voer query uit
         SQLiteDatabase db = getWritableDatabase();
@@ -314,6 +319,28 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
 
         return wachtwoord;
+    }
+    
+    /**
+     * Haalt het registratie id op van de gebruiker.
+     * 
+     * @return {@link String} Het wachtwoord.
+     */
+    public String getRegistratieId() {
+
+        // Voer query uit
+        String query = "SELECT " + KEY_REG_ID + " FROM " + TABLE_LOGIN;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        // Haal gegevens op
+        cursor.moveToFirst();
+        String regid = cursor.getString(cursor.getColumnIndexOrThrow(KEY_REG_ID));
+
+        cursor.close();
+        db.close();
+
+        return regid;
     }
 
     /**
