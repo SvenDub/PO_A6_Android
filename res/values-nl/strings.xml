@@ -76,5 +76,8 @@
     <string name="error_tag">Onbekende tag</string>
     <string name="server_error">Er is een serverfout opgetreden</string>
     <string name="invalid_login">Login incorrect</string>
+    
+    <!-- Notifications -->
+    <string name="bestelling_klaar">Bestelling klaar</string>
 
 </resources>
