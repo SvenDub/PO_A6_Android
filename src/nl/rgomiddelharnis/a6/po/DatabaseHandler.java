@@ -27,7 +27,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     /**
      * De huidige versie van de database.
      */
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
 
     /**
      * De tabel om te gebruiken voor het inloggen.
@@ -123,6 +123,48 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      */
     public static final String KEY_DATUM = "datum";
 
+    /**
+     * De query voor het aanmaken van de {@link #TABLE_LOGIN}.
+     */
+    private static final String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_LOGIN + "(" + KEY_ID
+            + " INTEGER PRIMARY KEY, " + KEY_GEBRUIKER + " TEXT UNIQUE, " + KEY_WACHTWOORD
+            + " TEXT," + KEY_SITE + " TEXT," + KEY_REG_ID + " TEXT" + ")";
+    /**
+     * De query voor het aanmaken van de {@link #TABLE_TAFEL}.
+     */
+    private static final String CREATE_TAFEL_TABLE = "CREATE TABLE " + TABLE_TAFEL + "(" + KEY_TAFELNR
+            + " INTEGER PRIMARY KEY, " + KEY_STATUS + " INTEGER" + ")";
+    /**
+     * De query voor het aanmaken van de {@link #TABLE_PRODUCTEN}.
+     */
+    private static final String CREATE_PRODUCTEN_TABLE = "CREATE TABLE " + TABLE_PRODUCTEN + "(" + KEY_PRODUCTNR
+            + " INTEGER PRIMARY KEY, " + KEY_CATEGORIENR + " INTEGER," + KEY_GERECHT + " TEXT,"
+            + KEY_PRIJS + " DOUBLE," + KEY_ACTIEF + " INTEGER" + ")";
+    /**
+     * De query voor het aanmaken van de {@link #TABLE_BESTELLINGEN}.
+     */
+    private static final String CREATE_BESTELLINGEN_TABLE = "CREATE TABLE " + TABLE_BESTELLINGEN + "("
+            + KEY_BESTELNR + " INTEGER PRIMARY KEY, " + KEY_TAFELNR + " INTEGER, " + KEY_ID
+            + " INTEGER, " + KEY_PRODUCTNR + " INTEGER, " + KEY_AANTAL + " INTEGER, "
+            + KEY_OPMERKING + " TEXT, " + KEY_DATUM + " TEXT, " + KEY_STATUS + " INTEGER" + ")";
+
+    /**
+     * De query voor het verwijderen van de {@link #TABLE_LOGIN}.
+     */
+    private static final String REMOVE_LOGIN_TABLE = "DROP TABLE " + TABLE_LOGIN;
+    /**
+     * De query voor het verwijderen van de {@link #TABLE_TAFEL}.
+     */
+    private static final String REMOVE_TAFEL_TABLE = "DROP TABLE " + TABLE_TAFEL;
+    /**
+     * De query voor het verwijderen van de {@link #TABLE_PRODUCTEN}.
+     */
+    private static final String REMOVE_PRODUCTEN_TABLE = "DROP TABLE " + TABLE_PRODUCTEN;
+    /**
+     * De query voor het verwijderen van de {@link #TABLE_BESTELLINGEN}.
+     */
+    private static final String REMOVE_BESTELLINGEN_TABLE = "DROP TABLE " + TABLE_BESTELLINGEN;
+
     Context mContext;
 
     /**
@@ -141,20 +183,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // Query's
-        String CREATE_LOGIN_TABLE = "CREATE TABLE " + TABLE_LOGIN + "(" + KEY_ID
-                + " INTEGER PRIMARY KEY, " + KEY_GEBRUIKER + " TEXT UNIQUE, " + KEY_WACHTWOORD
-                + " TEXT," + KEY_SITE + " TEXT," + KEY_REG_ID + " TEXT" + ")";
-        String CREATE_TAFEL_TABLE = "CREATE TABLE " + TABLE_TAFEL + "(" + KEY_TAFELNR
-                + " INTEGER PRIMARY KEY, " + KEY_STATUS + " INTEGER" + ")";
-        String CREATE_PRODUCTEN_TABLE = "CREATE TABLE " + TABLE_PRODUCTEN + "(" + KEY_PRODUCTNR
-                + " INTEGER PRIMARY KEY, " + KEY_CATEGORIENR + " INTEGER," + KEY_GERECHT + " TEXT,"
-                + KEY_PRIJS + " DOUBLE," + KEY_ACTIEF + " INTEGER" + ")";
-        String CREATE_BESTELLINGEN_TABLE = "CREATE TABLE " + TABLE_BESTELLINGEN + "("
-                + KEY_BESTELNR + " INTEGER PRIMARY KEY, " + KEY_TAFELNR + " INTEGER, " + KEY_ID
-                + " INTEGER, " + KEY_PRODUCTNR + " INTEGER, " + KEY_AANTAL + " INTEGER, "
-                + KEY_OPMERKING + " TEXT, " + KEY_DATUM + " TEXT, " + KEY_STATUS + " INTEGER" + ")";
-
         // Maak tabellen aan
         db.execSQL(CREATE_LOGIN_TABLE);
         db.execSQL(CREATE_TAFEL_TABLE);
@@ -167,8 +195,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // TODO Auto-generated method stub
-
+        // Voer een actie uit afhankelijk van de vorige versie
+        if (oldVersion == 1) {
+            // Maak login table opnieuw aan
+            db.execSQL(REMOVE_LOGIN_TABLE);
+            db.execSQL(CREATE_LOGIN_TABLE);
+        }
     }
 
     /**
@@ -320,7 +352,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         return wachtwoord;
     }
-    
+
     /**
      * Haalt het registratie id op van de gebruiker.
      * 
@@ -436,25 +468,28 @@ public class DatabaseHandler extends SQLiteOpenHelper {
      */
     public boolean isTafelBezet(int tafelnummer) {
         boolean result = false;
-        
+
         // Voer query uit
-        String query = "SELECT " + KEY_STATUS + " FROM " + TABLE_TAFEL + " WHERE " + KEY_TAFELNR + "=?";
+        String query = "SELECT " + KEY_STATUS + " FROM " + TABLE_TAFEL + " WHERE " + KEY_TAFELNR
+                + "=?";
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery(query, new String[] { Integer.toString(tafelnummer)});
-        
+        Cursor cursor = db.rawQuery(query, new String[] {
+                Integer.toString(tafelnummer)
+        });
+
         // Haal gegevens op
         cursor.moveToFirst();
         int status = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_STATUS));
-        
+
         result = (status == 1) ? true : false;
-        
+
         cursor.close();
         db.close();
-        
+
         return result;
-        
+
     }
-    
+
     /**
      * Voegt een nieuw product toe.
      * 
