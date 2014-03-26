@@ -11,16 +11,17 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
+import nl.rgomiddelharnis.a6.po.DatabaseHandler;
+import nl.rgomiddelharnis.a6.po.Functions;
+import nl.rgomiddelharnis.a6.po.R;
+import nl.rgomiddelharnis.a6.po.fragment.TafelsFragment;
+import nl.rgomiddelharnis.a6.po.task.TafelStatusTask;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import nl.rgomiddelharnis.a6.po.DatabaseHandler;
-import nl.rgomiddelharnis.a6.po.R;
-import nl.rgomiddelharnis.a6.po.fragment.TafelsFragment;
-import nl.rgomiddelharnis.a6.po.task.TafelStatusTask;
 
 /**
  * Beginscherm van de app.
@@ -41,6 +42,10 @@ public class MainActivity extends ProgressFragmentActivity {
      * @see android.util.Log
      */
     public static final boolean LOCAL_LOGV = true;
+    /**
+     * Google Developers project nummer.
+     */
+    public static final String SENDER_ID = "150943180444";
     /**
      * Tag voor in logs.
      * 
@@ -70,41 +75,54 @@ public class MainActivity extends ProgressFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mActionBar = getSupportActionBar();
-        mDb = new DatabaseHandler(getApplicationContext());
+        if (Functions.checkPlayServices(this)) {
 
-        if (mDb.isGebruikerIngelogd()) {
+            mActionBar = getSupportActionBar();
+            mDb = new DatabaseHandler(getApplicationContext());
 
-            // Gebruiker is ingelogd
+            if (mDb.isGebruikerIngelogd()) {
 
-            // Stel de layout in
-            setContentView(R.layout.activity_main);
+                // Gebruiker is ingelogd
 
-            // Voeg het TafelsFragment toe die een lijst met tafels bevat.
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager
-                    .beginTransaction();
+                // Stel de layout in
+                setContentView(R.layout.activity_main);
 
-            TafelsFragment tafelsFragment = new TafelsFragment();
+                // Voeg het TafelsFragment toe die een lijst met tafels bevat.
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager
+                        .beginTransaction();
 
-            fragmentTransaction.replace(R.id.fragment_tafels,
-                    tafelsFragment);
-            fragmentTransaction.commit();
+                TafelsFragment tafelsFragment = new TafelsFragment();
 
-            refresh();
-            
-        } else {
+                fragmentTransaction.replace(R.id.fragment_tafels,
+                        tafelsFragment);
+                fragmentTransaction.commit();
 
-            // Gebruiker is niet ingelogd
+                refresh();
 
-            // Start LoginActivity
-            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-            finish();
+            } else {
+
+                // Gebruiker is niet ingelogd
+
+                // Start LoginActivity
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                finish();
+
+            }
 
         }
 
+    }
+
+    /**
+     * @see android.app.Activity#onResume()
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Functions.checkPlayServices(this);
     }
 
     /**
@@ -128,31 +146,33 @@ public class MainActivity extends ProgressFragmentActivity {
                     // Gebruiker is niet meer ingelogd
 
                     // Meld dat het uitloggen gelukt is
-                    Toast toast = Toast.makeText(getApplicationContext(), R.string.logout_success, Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getApplicationContext(), R.string.logout_success,
+                            Toast.LENGTH_SHORT);
                     toast.show();
-                    
+
                     // Start LoginActivity
                     Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     finish();
                     break;
-                    
+
                 } else {
-                    
+
                     // Gebruiker is nog steeds ingelogd
-                    
+
                     // Meld dat het uitloggen niet gelukt is
-                    Toast toast = Toast.makeText(getApplicationContext(), R.string.logout_fail, Toast.LENGTH_SHORT);
+                    Toast toast = Toast.makeText(getApplicationContext(), R.string.logout_fail,
+                            Toast.LENGTH_SHORT);
                     toast.show();
-                    
+
                 }
                 return true;
             case R.id.action_refresh: // Vernieuw
                 refresh();
                 break;
             case R.id.action_settings: // Settings
-                
+
                 // Start SettingsActivity
                 Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
                 startActivity(intent);
@@ -166,14 +186,14 @@ public class MainActivity extends ProgressFragmentActivity {
      */
     @SuppressWarnings("unchecked")
     private void refresh() {
-        
+
         // Bereid de verbindingsparameters voor
         List<NameValuePair> params = new ArrayList<NameValuePair>(3);
         params.add(new BasicNameValuePair("tag", "tafel_status"));
         params.add(new BasicNameValuePair("gebruikersnaam", mDb.getGebruikersnaam()));
         params.add(new BasicNameValuePair("wachtwoord", mDb.getWachtwoord()));
-        
+
         new TafelStatusTask(this).execute(params);
     }
-    
+
 }

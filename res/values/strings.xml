@@ -76,5 +76,8 @@
     <string name="error_tag">Unknown tag</string>
     <string name="server_error">A server error has occurred</string>
     <string name="invalid_login">Log in invalid</string>
+    
+    <!-- Notifications -->
+    <string name="bestelling_klaar">Order ready</string>
 
 </resources>
